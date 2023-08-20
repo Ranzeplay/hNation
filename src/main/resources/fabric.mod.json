@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "h-nation",
+  "version": "${version}",
+  "name": "hNation",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/Ranzeplay/hNation"
+  },
+  "license": "MIT",
+  "icon": "assets/h-nation/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "me.ranzeplay.hnation.client.ClientMain"
+    ],
+    "main": [
+      "me.ranzeplay.hnation.general.GeneralMain"
+    ],
+    "server": [
+      "me.ranzeplay.hnation.server.ServerMain"
+    ]
+  },
+  "mixins": [
+    "h-nation.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
