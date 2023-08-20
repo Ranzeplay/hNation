@@ -1,6 +1,7 @@
 package me.ranzeplay.hnation.networking;
 
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 
 import java.util.ArrayList;
 
@@ -34,9 +35,12 @@ public class POIQueryViewModel {
         var nbt = new NbtCompound();
         nbt.putInt("length", length);
 
-        for(int i = 0; i < length; i++) {
-            nbt.put(String.valueOf(i), items[i].toNbt());
+        NbtList list = new NbtList();
+        for(var item : items) {
+            list.add(item.toNbt());
         }
+
+        nbt.put("items", list);
 
         return nbt;
     }
@@ -45,9 +49,11 @@ public class POIQueryViewModel {
         var result = new POIQueryViewModel();
         result.length = nbt.getInt("length");
 
+        var list = nbt.getList("items", NbtList.COMPOUND_TYPE);
+
         var items = new ArrayList<POIViewModel>();
         for (int i = 0; i < result.length; i++) {
-            items.add(POIViewModel.fromNbt(nbt.getCompound(String.valueOf(i))));
+            items.add(POIViewModel.fromNbt(list.getCompound(i)));
         }
         result.items = items.toArray(new POIViewModel[0]);
 
