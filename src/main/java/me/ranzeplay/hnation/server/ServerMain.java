@@ -4,6 +4,7 @@ import me.ranzeplay.hnation.networking.NetworkingIdentifier;
 import me.ranzeplay.hnation.server.db.DatabaseManager;
 import me.ranzeplay.hnation.server.networking.POIOperation;
 import net.fabricmc.api.DedicatedServerModInitializer;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -42,5 +43,19 @@ public class ServerMain implements DedicatedServerModInitializer {
                     }
                 }
         );
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.QUERY_POI_REQUEST,
+                (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    POIOperation.query(sender);
+                }
+        );
+
+        ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> {
+            try {
+                PlayerManager.onPlayerJoin(handler.getPlayer());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }));
     }
 }

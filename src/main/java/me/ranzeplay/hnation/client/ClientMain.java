@@ -3,15 +3,18 @@ package me.ranzeplay.hnation.client;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import me.ranzeplay.hnation.client.commands.POICommand;
+import me.ranzeplay.hnation.networking.NetworkingIdentifier;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.command.argument.NumberRangeArgumentType;
 
 public class ClientMain implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         registerCommands();
+        registerNetworkingHandlers();
     }
 
     private void registerCommands() {
@@ -44,8 +47,17 @@ public class ClientMain implements ClientModInitializer {
                                             )
                                     )
                             )
+                            .then(ClientCommandManager.literal("query")
+                                    .executes(context -> POICommand.query())
+                            )
                     )
             );
         });
+    }
+
+    private void registerNetworkingHandlers() {
+        ClientPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.QUERY_POI_REPLY,
+                (minecraftClient, clientPlayNetworkHandler, packetByteBuf, packetSender) -> POICommand.queryReply(packetByteBuf)
+        );
     }
 }

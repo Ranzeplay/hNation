@@ -15,19 +15,26 @@ public class DatabaseManager {
     ConnectionSource connectionSource;
 
     Dao<DbPOI, UUID> poiDao;
+    Dao<DbPlayer, UUID> playerDao;
 
     public DatabaseManager(Path dbFile) throws SQLException {
         connectionString = "jdbc:sqlite:" + dbFile;
         connectionSource = new JdbcConnectionSource(connectionString);
 
         poiDao = DaoManager.createDao(connectionSource, DbPOI.class);
+        playerDao = DaoManager.createDao(connectionSource, DbPlayer.class);
     }
 
     public void init() throws SQLException {
         TableUtils.createTableIfNotExists(connectionSource, DbPOI.class);
+        TableUtils.createTableIfNotExists(connectionSource, DbPlayer.class);
     }
 
     public Dao<DbPOI, UUID> getPoiDao() {
         return poiDao;
+    }
+
+    public Dao<DbPlayer, UUID> getPlayerDao() {
+        return playerDao;
     }
 }

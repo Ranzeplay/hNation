@@ -1,14 +1,20 @@
 package me.ranzeplay.hnation.server.networking;
 
+import me.ranzeplay.hnation.networking.NetworkingIdentifier;
 import me.ranzeplay.hnation.networking.POICreationModel;
+import me.ranzeplay.hnation.networking.POIViewModel;
+import me.ranzeplay.hnation.networking.POIQueryViewModel;
 import me.ranzeplay.hnation.server.ServerMain;
 import me.ranzeplay.hnation.server.db.DbPOI;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -33,5 +39,16 @@ public class POIOperation {
         ServerMain.dbManager.getPoiDao().create(poi);
 
         sender.sendMessage(Text.of("POI Created"));
+    }
+
+    public static void query(ServerPlayerEntity sender) {
+        var list = new ArrayList<POIViewModel>();
+        for(var poi : ServerMain.dbManager.getPoiDao()){
+            list.add(new POIViewModel(poi));
+        }
+
+        var model = new POIQueryViewModel(list.toArray(new POIViewModel[0]));
+
+        ServerPlayNetworking.send(sender, NetworkingIdentifier.QUERY_POI_REPLY, PacketByteBufs.create().writeNbt(model.toNbt()));
     }
 }
