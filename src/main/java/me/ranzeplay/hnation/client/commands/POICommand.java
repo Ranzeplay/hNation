@@ -29,13 +29,13 @@ public class POICommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    public static void queryReply(PacketByteBuf buf) {
+    public static void queryReply(MinecraftClient client, PacketByteBuf buf) {
         var model = POIQueryViewModel.fromNbt(Objects.requireNonNull(buf.readNbt()));
 
-        assert MinecraftClient.getInstance().player != null;
-        MinecraftClient.getInstance().player.sendMessage(Text.of("Showing " + model.getLength() + " POI item(s)"));
+        assert client.player != null;
+        client.player.sendMessage(Text.of("Showing " + model.getLength() + " POI item(s)"));
         for (var item : model.getItems()){
-            MinecraftClient.getInstance().player.sendMessage(Text.of(item.getName() + " at [" + item.getX() + ", " + item.getY() + ", " + item.getZ() + " @ " + item.getWorldName() + "]"));
+           client.player.sendMessage(Text.of(item.getName() + " at [" + item.getX() + ", " + item.getY() + ", " + item.getZ() + " @ " + item.getWorldName() + "]"));
         }
     }
 }
