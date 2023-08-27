@@ -23,25 +23,31 @@ public class ClientMain implements ClientModInitializer {
             dispatcher.register(ClientCommandManager.literal("hnt")
                     .then(ClientCommandManager.literal("poi")
                             .then(ClientCommandManager.literal("create")
-                                    .then(ClientCommandManager.argument("name", StringArgumentType.string())
-                                            .executes(context ->
-                                                    POICommand.create(context.getSource().getPlayer().getBlockX(),
-                                                            context.getSource().getPlayer().getBlockY(),
-                                                            context.getSource().getPlayer().getBlockZ(),
-                                                            context.getSource().getPlayer().getWorld().getDimensionKey().getValue().toString(),
-                                                            StringArgumentType.getString(context, "name"),
-                                                            context.getSource().getPlayer().getUuid())))
-                                    .then(ClientCommandManager.argument("x", IntegerArgumentType.integer())
-                                            .then(ClientCommandManager.argument("y", IntegerArgumentType.integer())
-                                                    .then(ClientCommandManager.argument("z", IntegerArgumentType.integer())
-                                                            .then(ClientCommandManager.argument("name", StringArgumentType.string())
-                                                                    .executes(context ->
-                                                                            POICommand.create(IntegerArgumentType.getInteger(context, "x"),
-                                                                                    IntegerArgumentType.getInteger(context, "y"),
-                                                                                    IntegerArgumentType.getInteger(context, "z"),
-                                                                                    context.getSource().getPlayer().getWorld().getDimensionKey().getValue().toString(),
-                                                                                    StringArgumentType.getString(context, "name"),
-                                                                                    context.getSource().getPlayer().getUuid())
+                                    .then(ClientCommandManager.literal("here")
+                                            .then(ClientCommandManager.argument("name", StringArgumentType.string())
+                                                    .executes(context ->
+                                                            POICommand.create(context.getSource().getPlayer().getBlockX(),
+                                                                    context.getSource().getPlayer().getBlockY(),
+                                                                    context.getSource().getPlayer().getBlockZ(),
+                                                                    context.getSource().getPlayer().getWorld().getDimensionKey().getValue().toString(),
+                                                                    StringArgumentType.getString(context, "name"),
+                                                                    context.getSource().getPlayer().getUuid())
+                                                    )
+                                            )
+                                    )
+                                    .then(ClientCommandManager.literal("at")
+                                            .then(ClientCommandManager.argument("x", IntegerArgumentType.integer())
+                                                    .then(ClientCommandManager.argument("y", IntegerArgumentType.integer())
+                                                            .then(ClientCommandManager.argument("z", IntegerArgumentType.integer())
+                                                                    .then(ClientCommandManager.argument("name", StringArgumentType.string())
+                                                                            .executes(context ->
+                                                                                    POICommand.create(IntegerArgumentType.getInteger(context, "x"),
+                                                                                            IntegerArgumentType.getInteger(context, "y"),
+                                                                                            IntegerArgumentType.getInteger(context, "z"),
+                                                                                            context.getSource().getPlayer().getWorld().getDimensionKey().getValue().toString(),
+                                                                                            StringArgumentType.getString(context, "name"),
+                                                                                            context.getSource().getPlayer().getUuid())
+                                                                            )
                                                                     )
                                                             )
                                                     )
