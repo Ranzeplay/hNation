@@ -12,8 +12,7 @@ public class PlayerManager {
         DbPlayer dbPlayer = dao.queryForId(player.getUuid());
         if (dbPlayer == null) {
             dbPlayer = new DbPlayer(player.getUuid(), player.getEntityName());
+            dao.create(dbPlayer);
         }
-
-        dao.create(dbPlayer);
     }
 }

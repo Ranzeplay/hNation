@@ -19,6 +19,8 @@ public abstract class ChatMessageBase {
     public ChatMessageBase(String message, DbPlayer sender) {
         this.message = message;
         this.sender = sender;
+        this.id = UUID.randomUUID();
+        time = new Timestamp(System.currentTimeMillis());
     }
 
     public ChatMessageBase() {

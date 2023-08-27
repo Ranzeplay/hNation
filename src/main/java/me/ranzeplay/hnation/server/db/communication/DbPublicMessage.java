@@ -13,4 +13,7 @@ public class DbPublicMessage extends ChatMessageBase {
                 .append("<").append(sender.getName()).append(" @ ").append("[PUBLIC]").append("> ")
                 .append(message);
     }
+
+    public DbPublicMessage() {
+    }
 }

@@ -26,4 +26,7 @@ public class DbMail {
         id = UUID.randomUUID();
         sendTime = new Timestamp(System.currentTimeMillis());
     }
+
+    public DbMail() {
+    }
 }

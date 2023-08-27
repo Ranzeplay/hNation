@@ -19,4 +19,7 @@ public class DbChannelMessage extends ChatMessageBase {
                 .append("<").append(sender.getName()).append(" @ ").append("[C]").append(channel.getName()).append("> ")
                 .append(message);
     }
+
+    public DbChannelMessage() {
+    }
 }
