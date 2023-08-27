@@ -15,10 +15,10 @@ public class DbChannel {
     UUID id;
     @DatabaseField(canBeNull = false)
     String name;
-    @ForeignCollectionField(eager = true)
+    // @ForeignCollectionField(eager = true)
     ForeignCollection<DbPlayer> members;
     @ForeignCollectionField(eager = true)
-    ForeignCollection<DbChannelMessage> messages;
+    // ForeignCollection<DbChannelMessage> messages;
     @DatabaseField(canBeNull = false)
     Timestamp createTime;
 
@@ -34,11 +34,14 @@ public class DbChannel {
         return members;
     }
 
-    public ForeignCollection<DbChannelMessage> getMessages() {
-        return messages;
-    }
+    // public ForeignCollection<DbChannelMessage> getMessages() {
+    //     return messages;
+    // }
 
     public Timestamp getCreateTime() {
         return createTime;
+    }
+
+    public DbChannel() {
     }
 }

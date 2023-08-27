@@ -2,6 +2,7 @@ package me.ranzeplay.hnation.server;
 
 import me.ranzeplay.hnation.networking.NetworkingIdentifier;
 import me.ranzeplay.hnation.server.db.DatabaseManager;
+import me.ranzeplay.hnation.server.networking.CommunicationOperation;
 import me.ranzeplay.hnation.server.networking.POIOperation;
 import me.ranzeplay.hnation.server.networking.RegionOperation;
 import net.fabricmc.api.DedicatedServerModInitializer;
@@ -55,6 +56,16 @@ public class ServerMain implements DedicatedServerModInitializer {
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     try {
                         RegionOperation.create(sender, packetByteBuf);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SEND_CHAT_PUBLIC,
+                (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    try {
+                        CommunicationOperation.publicChat(minecraftServer, sender, packetByteBuf);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }

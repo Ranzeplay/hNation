@@ -11,7 +11,10 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import org.joml.Vector2i;
 
+
 public class ClientMain implements ClientModInitializer {
+    public static ChatFocus chatFocus = ChatFocus.PUBLIC;
+
     @Override
     public void onInitializeClient() {
         registerCommands();
