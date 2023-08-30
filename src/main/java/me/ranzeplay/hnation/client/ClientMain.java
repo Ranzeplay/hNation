@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import me.ranzeplay.hnation.client.commands.POICommand;
 import me.ranzeplay.hnation.client.commands.RegionCommand;
+import me.ranzeplay.hnation.client.commands.transit.TransitLineCommand;
 import me.ranzeplay.hnation.networking.NetworkingIdentifier;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
@@ -90,6 +91,13 @@ public class ClientMain implements ClientModInitializer {
                                     .then(ClientCommandManager.literal("discard")
                                             .executes(context ->
                                                     RegionCommand.discard()))
+                            )
+                    )
+                    .then(ClientCommandManager.literal("transit")
+                            .then(ClientCommandManager.literal("line")
+                                    .then(ClientCommandManager.literal("create")
+                                            .executes(context -> TransitLineCommand.createTransitLine())
+                                    )
                             )
                     )
             );

@@ -28,8 +28,8 @@ dependencies {
     implementation "com.j256.ormlite:ormlite-core:${project.ormlite_version}"
     implementation "org.xerial:sqlite-jdbc:${project.sqlite_jdbc_version}"
 
-    // Apache geometry library
-    implementation 'io.github.agdturner:ccg-v3d:0.19'
+    // Vector library
+    implementation 'org.realityforge.vecmath:vecmath:0.13'
 }
 
 processResources {

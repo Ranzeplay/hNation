@@ -16,4 +16,7 @@ public class NetworkingIdentifier {
     public static final Identifier SEND_CHAT_PRIVATE = new Identifier("hnation.networking.chat", "send/private");
     public static final Identifier SEND_CHAT_CHANNEL = new Identifier("hnation.networking.chat", "send/channel");
     public static final Identifier SEND_CHAT_SQUAD = new Identifier("hnation.networking.chat", "send/squad");
+
+    public static final Identifier CREATE_TRANSIT_LINE_REQUEST = new Identifier("hnation.networking.request", "transit/line/create");
+    public static final Identifier CREATE_TRANSIT_LINE_REPLY = new Identifier("hnation.networking.reply", "transit/line/create");
 }

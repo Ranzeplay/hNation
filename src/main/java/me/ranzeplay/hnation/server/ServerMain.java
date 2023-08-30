@@ -2,6 +2,7 @@ package me.ranzeplay.hnation.server;
 
 import me.ranzeplay.hnation.networking.NetworkingIdentifier;
 import me.ranzeplay.hnation.server.db.DatabaseManager;
+import me.ranzeplay.hnation.server.managers.RailwayManager;
 import me.ranzeplay.hnation.server.networking.CommunicationOperation;
 import me.ranzeplay.hnation.server.networking.POIOperation;
 import me.ranzeplay.hnation.server.networking.RegionOperation;
@@ -69,6 +70,12 @@ public class ServerMain implements DedicatedServerModInitializer {
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.CREATE_TRANSIT_LINE_REQUEST,
+                (_minecraftServer, sender, _serverPlayNetworkHandler, _packetByteBuf, _packetSender) -> {
+                    RailwayManager.scanRailwayPath(sender);
                 }
         );
 
