@@ -15,12 +15,15 @@ public class DbChannel {
     UUID id;
     @DatabaseField(canBeNull = false)
     String name;
-    // @ForeignCollectionField(eager = true)
-    ForeignCollection<DbPlayer> members;
-    @ForeignCollectionField(eager = true)
-    // ForeignCollection<DbChannelMessage> messages;
+    // @ForeignCollectionField
+    // ForeignCollection<DbPlayer> members;
+    @ForeignCollectionField
+    ForeignCollection<DbChannelMessage> messages;
     @DatabaseField(canBeNull = false)
     Timestamp createTime;
+
+    @DatabaseField(canBeNull = false, foreign = true)
+    DbPlayer owner;
 
     public UUID getId() {
         return id;
@@ -30,13 +33,13 @@ public class DbChannel {
         return name;
     }
 
-    public ForeignCollection<DbPlayer> getMembers() {
-        return members;
-    }
+//    public ForeignCollection<DbPlayer> getMembers() {
+//        return members;
+//    }
 
-    // public ForeignCollection<DbChannelMessage> getMessages() {
-    //     return messages;
-    // }
+    public ForeignCollection<DbChannelMessage> getMessages() {
+        return messages;
+    }
 
     public Timestamp getCreateTime() {
         return createTime;

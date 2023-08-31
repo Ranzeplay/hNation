@@ -1,8 +1,13 @@
 package me.ranzeplay.hnation.client.commands;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.ranzeplay.hnation.networking.NetworkingIdentifier;
 import me.ranzeplay.hnation.networking.RegionCreationModel;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
@@ -11,6 +16,39 @@ import org.joml.Vector2i;
 
 public class RegionCommand {
     private static RegionCreationModel currentCreatingRegion = null;
+
+    public static LiteralArgumentBuilder<FabricClientCommandSource> buildCommandTree() {
+        return ClientCommandManager.literal("region")
+                .then(ClientCommandManager.literal("create")
+                        .then(ClientCommandManager.literal("declare")
+                                .then(ClientCommandManager.argument("name", StringArgumentType.string())
+                                        .then(ClientCommandManager.argument("minY", IntegerArgumentType.integer())
+                                                .then(ClientCommandManager.argument("maxY", IntegerArgumentType.integer())
+                                                        .executes(context ->
+                                                                RegionCommand.createRegion(StringArgumentType.getString(context, "name"),
+                                                                        context.getSource().getPlayer().getWorld().getDimensionKey().getValue().toString(),
+                                                                        IntegerArgumentType.getInteger(context, "minY"),
+                                                                        IntegerArgumentType.getInteger(context, "maxY"))
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                        .then(ClientCommandManager.literal("add")
+                                .executes(context ->
+                                        RegionCommand.appendPoint(new Vector2i(context.getSource().getPlayer().getBlockX(), context.getSource().getPlayer().getBlockZ()))
+                                )
+                        )
+                        .then(ClientCommandManager.literal("commit")
+                                .executes(context ->
+                                        RegionCommand.commitCreation()
+                                )
+                        )
+                        .then(ClientCommandManager.literal("discard")
+                                .executes(context ->
+                                        RegionCommand.discard()))
+                );
+    }
 
     public static int createRegion(String name, String worldName, int minY, int maxY) {
         assert MinecraftClient.getInstance().player != null;

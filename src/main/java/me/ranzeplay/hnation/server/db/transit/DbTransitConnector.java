@@ -59,4 +59,13 @@ public class DbTransitConnector {
         y2 = p2.y();
         z2 = p2.z();
     }
+
+    public DbTransitConnector(DbTransitLine line, DbTransitNode node, int connectorId, TransitStatus status, Vector3i p1, Vector3i p2) {
+        this.line = line;
+        this.node = node;
+        this.connectorId = connectorId;
+        this.status = status;
+
+        this.setSegment(p1, p2);
+    }
 }
