@@ -1,4 +1,4 @@
-package me.ranzeplay.hnation.server.managers;
+package me.ranzeplay.hnation.server.utils;
 
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.util.math.BlockPos;
@@ -128,12 +128,13 @@ public class RailwayScanner {
             origin.add(new Vec3i(p.getX(), p.getY(), p.getZ()));
         }
 
+        // Only save turning points
         result.add(origin.get(0));
         result.add(origin.get(1));
         for (int i = 2; i < origin.size(); i++) {
             var resultLineVec = result.get(result.size() - 1).subtract(result.get(result.size() - 2));
             var appendVec = origin.get(i).subtract(result.get(result.size() - 1));
-            if (sameDirection(resultLineVec, appendVec)) {
+            if (isSameDirection(resultLineVec, appendVec)) {
                 result.set(result.size() - 1, origin.get(i));
             } else {
                 result.add(origin.get(i));
@@ -143,7 +144,7 @@ public class RailwayScanner {
         scannedPositions = result;
     }
 
-    public boolean sameDirection(Vec3i v1, Vec3i v2) {
+    public boolean isSameDirection(Vec3i v1, Vec3i v2) {
         Vector3f vv1 = new Vector3f(v1.getX(), v1.getY(), v1.getZ());
         Vector3f vv2 = new Vector3f(v2.getX(), v2.getY(), v2.getZ());
 

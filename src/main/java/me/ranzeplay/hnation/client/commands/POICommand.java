@@ -7,6 +7,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.ranzeplay.hnation.networking.NetworkingIdentifier;
 import me.ranzeplay.hnation.networking.POICreationModel;
 import me.ranzeplay.hnation.networking.POIQueryViewModel;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -18,6 +20,7 @@ import net.minecraft.text.Text;
 import java.util.Objects;
 import java.util.UUID;
 
+@Environment(EnvType.CLIENT)
 public class POICommand {
     public static LiteralArgumentBuilder<FabricClientCommandSource> buildCommandTree() {
         return ClientCommandManager.literal("poi")

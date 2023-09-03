@@ -3,6 +3,7 @@ package me.ranzeplay.hnation.server;
 import me.ranzeplay.hnation.networking.NetworkingIdentifier;
 import me.ranzeplay.hnation.server.db.DatabaseManager;
 import me.ranzeplay.hnation.server.managers.RailwayManager;
+import me.ranzeplay.hnation.server.managers.communication.SquadManager;
 import me.ranzeplay.hnation.server.networking.CommunicationOperation;
 import me.ranzeplay.hnation.server.networking.POIOperation;
 import me.ranzeplay.hnation.server.networking.RegionOperation;
@@ -17,6 +18,8 @@ import java.sql.SQLException;
 
 public class ServerMain implements DedicatedServerModInitializer {
     public static DatabaseManager dbManager = null;
+
+    public static SquadManager squadManager = null;
 
     @Override
     public void onInitializeServer() {
@@ -34,6 +37,8 @@ public class ServerMain implements DedicatedServerModInitializer {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        squadManager = new SquadManager();
     }
 
     private void registerNetworkingHandlers() {
@@ -74,10 +79,19 @@ public class ServerMain implements DedicatedServerModInitializer {
         );
 
         ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.CREATE_TRANSIT_LINE_REQUEST,
-                (_minecraftServer, sender, _serverPlayNetworkHandler, _packetByteBuf, _packetSender) -> {
-                    RailwayManager.scanRailwayPath(sender);
+                (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    RailwayManager.scanRailwayPath(sender, packetByteBuf);
                 }
         );
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_CREATE_REQUEST,
+                (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    try {
+                        CommunicationOperation.createSquad(sender, packetByteBuf);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             try {

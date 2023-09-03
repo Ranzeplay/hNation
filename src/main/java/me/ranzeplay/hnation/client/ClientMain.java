@@ -1,22 +1,23 @@
 package me.ranzeplay.hnation.client;
 
-import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import me.ranzeplay.hnation.client.commands.ChannelCommand;
 import me.ranzeplay.hnation.client.commands.POICommand;
 import me.ranzeplay.hnation.client.commands.RegionCommand;
+import me.ranzeplay.hnation.client.commands.comm.ChannelCommand;
 import me.ranzeplay.hnation.client.commands.transit.TransitCommand;
-import me.ranzeplay.hnation.client.commands.transit.TransitLineCommand;
 import me.ranzeplay.hnation.networking.NetworkingIdentifier;
+import me.ranzeplay.hnation.server.db.DbPlayer;
+import me.ranzeplay.hnation.server.db.communication.DbSquad;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import org.joml.Vector2i;
 
-
+@Environment(EnvType.CLIENT)
 public class ClientMain implements ClientModInitializer {
     public static ChatFocus chatFocus = ChatFocus.PUBLIC;
+    public static DbSquad joinedSquad = null;
 
     @Override
     public void onInitializeClient() {

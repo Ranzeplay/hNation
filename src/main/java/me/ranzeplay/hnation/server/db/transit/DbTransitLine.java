@@ -27,7 +27,7 @@ public class DbTransitLine {
     @DatabaseField(canBeNull = false)
     TransitStatus status;
 
-    @DatabaseField(canBeNull = true)
+    @DatabaseField()
     String paths;
 
     @ForeignCollectionField(eager = true)
@@ -47,5 +47,15 @@ public class DbTransitLine {
         paths = gson.toJson(pathView);
 
         this.pathView = pathView;
+    }
+
+    public DbTransitLine(String name, UUID playerUuid, String worldName, TransitStatus status, ArrayList<Vector3i> paths) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.playerUuid = playerUuid;
+        this.worldName = worldName;
+        this.status = status;
+
+        this.setPathView(paths);
     }
 }

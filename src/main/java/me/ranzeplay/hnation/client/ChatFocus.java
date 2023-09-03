@@ -1,8 +1,8 @@
 package me.ranzeplay.hnation.client;
 
 public enum ChatFocus {
-    CHANNEL,
     PUBLIC,
+    CHANNEL,
     PRIVATE,
     SQUAD;
 

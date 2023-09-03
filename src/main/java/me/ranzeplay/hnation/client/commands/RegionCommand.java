@@ -6,6 +6,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.ranzeplay.hnation.networking.NetworkingIdentifier;
 import me.ranzeplay.hnation.networking.RegionCreationModel;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -14,6 +16,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import org.joml.Vector2i;
 
+@Environment(EnvType.CLIENT)
 public class RegionCommand {
     private static RegionCreationModel currentCreatingRegion = null;
 
