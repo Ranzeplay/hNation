@@ -10,7 +10,7 @@ public class SquadManager {
     public ArrayList<DbSquad> squads;
 
     public SquadManager() {
-        squads = new ArrayList<DbSquad>();
+        squads = new ArrayList<>();
     }
 
     public boolean createSquad(DbPlayer player, DbSquad squad) {

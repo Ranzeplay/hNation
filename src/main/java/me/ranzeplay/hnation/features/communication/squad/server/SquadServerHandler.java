@@ -1,9 +1,9 @@
-package me.ranzeplay.hnation.features.communication;
+package me.ranzeplay.hnation.features.communication.squad.server;
 
-import me.ranzeplay.hnation.main.NetworkingIdentifier;
-import me.ranzeplay.hnation.features.communication.squad.viewmodel.SquadCreationReplyViewModel;
-import me.ranzeplay.hnation.main.ServerMain;
 import me.ranzeplay.hnation.features.communication.squad.db.DbSquad;
+import me.ranzeplay.hnation.features.communication.squad.viewmodel.SquadCreationReplyViewModel;
+import me.ranzeplay.hnation.main.NetworkingIdentifier;
+import me.ranzeplay.hnation.main.ServerMain;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -13,18 +13,17 @@ import net.minecraft.text.Text;
 
 import java.sql.SQLException;
 
-public class CommunicationOperation {
-
+public class SquadServerHandler {
     public static void createSquad(ServerPlayerEntity sender, PacketByteBuf packetByteBuf) throws SQLException {
         var nbt = packetByteBuf.readNbt();
         assert nbt != null;
         var squad = new DbSquad(nbt);
         var player = ServerMain.dbManager.getPlayerDao().queryForId(sender.getUuid());
         var success = ServerMain.squadManager.createSquad(player, squad);
-        if(success) {
+        if (success) {
             ServerPlayNetworking.send(sender, NetworkingIdentifier.SQUAD_CREATE_REPLY,
                     PacketByteBufs.create().writeNbt(new SquadCreationReplyViewModel(true, "").toNbt()));
-        }else {
+        } else {
             ServerPlayNetworking.send(sender, NetworkingIdentifier.SQUAD_CREATE_REPLY,
                     PacketByteBufs.create().writeNbt(new SquadCreationReplyViewModel(false, "Failed to create a squad").toNbt()));
         }
@@ -45,9 +44,9 @@ public class CommunicationOperation {
                 );
         // Check if player is the leader of a squad
         var squad = ServerMain.squadManager.getLeadingSquad(player);
-        if(squad != null) {
+        if (squad != null) {
             var targetPlayer = server.getPlayerManager().getPlayer(targetDbPlayer.getId());
-            if(!squad.getInvitations().containsKey(targetDbPlayer.getId()) && targetPlayer != null) {
+            if (!squad.getInvitations().containsKey(targetDbPlayer.getId()) && targetPlayer != null) {
                 squad.invitePlayer(targetDbPlayer.getId());
 
                 targetPlayer.sendMessage(Text.literal("You are being invited to " + targetDbPlayer.getName() + "'s squad"));
@@ -61,12 +60,24 @@ public class CommunicationOperation {
                 .queryForId(sender.getUuid());
         var squadId = packetByteBuf.readUuid();
         var squad = ServerMain.squadManager.getSquadById(squadId);
-        if(squad != null) {
-            if(!squad.getJoinRequests().containsKey(player.getId())) {
+        if (squad != null) {
+            if (!squad.getJoinRequests().containsKey(player.getId())) {
                 squad.invitePlayer(player.getId());
 
                 sender.sendMessage(Text.literal("Request has been sent"));
             }
         }
+    }
+
+    public static void registerEvents() {
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_CREATE_REQUEST,
+                (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    try {
+                        SquadServerHandler.createSquad(sender, packetByteBuf);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
     }
 }

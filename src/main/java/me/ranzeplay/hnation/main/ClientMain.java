@@ -1,9 +1,11 @@
 package me.ranzeplay.hnation.main;
 
 import me.ranzeplay.hnation.features.communication.CommunicationFocusOption;
+import me.ranzeplay.hnation.features.poi.client.ClientPOIHandler;
 import me.ranzeplay.hnation.features.poi.client.POICommand;
-import me.ranzeplay.hnation.features.region.client.RegionCommand;
+import me.ranzeplay.hnation.features.region.client.ClientRegionCommand;
 import me.ranzeplay.hnation.features.communication.channel.client.ChannelCommand;
+import me.ranzeplay.hnation.features.region.client.ClientRegionHandler;
 import me.ranzeplay.hnation.features.transit.client.TransitCommand;
 import me.ranzeplay.hnation.features.communication.squad.db.DbSquad;
 import net.fabricmc.api.ClientModInitializer;
@@ -28,7 +30,7 @@ public class ClientMain implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             dispatcher.register(ClientCommandManager.literal("hnt")
                     .then(POICommand.buildCommandTree())
-                    .then(RegionCommand.buildCommandTree())
+                    .then(ClientRegionCommand.buildCommandTree())
                     .then(ChannelCommand.buildCommandTree())
                     .then(TransitCommand.buildCommandTree())
             );
@@ -36,12 +38,7 @@ public class ClientMain implements ClientModInitializer {
     }
 
     private void registerNetworkingHandlers() {
-        ClientPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.QUERY_POI_REPLY,
-                (minecraftClient, _clientPlayNetworkHandler, packetByteBuf, packetSender) -> POICommand.queryReply(minecraftClient, packetByteBuf)
-        );
-
-        ClientPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.CREATE_REGION_REPLY,
-                (minecraftClient, _clientPlayNetworkHandler, _packetByteBuf, _packetSender) -> RegionCommand.commitCreationReply(minecraftClient)
-        );
+        ClientPOIHandler.registerEvents();
+        ClientRegionHandler.registerEvents();
     }
 }

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
-public class POIOperation {
+public class ServerPOIHandler {
     public static void create(ServerPlayerEntity sender, PacketByteBuf buf) throws SQLException {
         var packet = POICreationModel.fromNbt(Objects.requireNonNull(buf.readNbt()));
 
@@ -50,5 +50,23 @@ public class POIOperation {
         var model = new POIQueryViewModel(list.toArray(new POIViewModel[0]));
 
         ServerPlayNetworking.send(sender, NetworkingIdentifier.QUERY_POI_REPLY, PacketByteBufs.create().writeNbt(model.toNbt()));
+    }
+
+    public static void registerEvents() {
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.CREATE_POI_REQUEST,
+                (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    try {
+                        ServerPOIHandler.create(sender, packetByteBuf);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.QUERY_POI_REQUEST,
+                (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    ServerPOIHandler.query(sender);
+                }
+        );
     }
 }

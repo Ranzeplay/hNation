@@ -1,7 +1,9 @@
 package me.ranzeplay.hnation.features.communication.messaging.global.server;
 
 import me.ranzeplay.hnation.features.communication.messaging.global.db.DbGlobalMessage;
+import me.ranzeplay.hnation.main.NetworkingIdentifier;
 import me.ranzeplay.hnation.main.ServerMain;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -22,5 +24,17 @@ public class GlobalChatServerHandler {
         for (var p : players) {
             p.sendMessage(model.toMessageText());
         }
+    }
+
+    public static void registerEvents() {
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SEND_CHAT_PUBLIC,
+                (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    try {
+                        GlobalChatServerHandler.send(minecraftServer, sender, packetByteBuf);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
     }
 }

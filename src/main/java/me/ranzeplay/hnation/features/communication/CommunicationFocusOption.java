@@ -6,7 +6,7 @@ public enum CommunicationFocusOption {
     PRIVATE,
     SQUAD;
 
-    String commId;
+    private String commId;
 
     public String getCommId() {
         return commId;

@@ -1,6 +1,5 @@
 package me.ranzeplay.hnation.mixin;
 
-import me.ranzeplay.hnation.features.communication.CommunicationManager;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

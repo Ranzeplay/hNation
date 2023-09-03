@@ -17,7 +17,7 @@ import net.minecraft.text.Text;
 import org.joml.Vector2i;
 
 @Environment(EnvType.CLIENT)
-public class RegionCommand {
+public class ClientRegionCommand {
     private static RegionCreationModel currentCreatingRegion = null;
 
     public static LiteralArgumentBuilder<FabricClientCommandSource> buildCommandTree() {
@@ -28,7 +28,7 @@ public class RegionCommand {
                                         .then(ClientCommandManager.argument("minY", IntegerArgumentType.integer())
                                                 .then(ClientCommandManager.argument("maxY", IntegerArgumentType.integer())
                                                         .executes(context ->
-                                                                RegionCommand.createRegion(StringArgumentType.getString(context, "name"),
+                                                                createRegion(StringArgumentType.getString(context, "name"),
                                                                         context.getSource().getPlayer().getWorld().getDimensionKey().getValue().toString(),
                                                                         IntegerArgumentType.getInteger(context, "minY"),
                                                                         IntegerArgumentType.getInteger(context, "maxY"))
@@ -39,17 +39,17 @@ public class RegionCommand {
                         )
                         .then(ClientCommandManager.literal("add")
                                 .executes(context ->
-                                        RegionCommand.appendPoint(new Vector2i(context.getSource().getPlayer().getBlockX(), context.getSource().getPlayer().getBlockZ()))
+                                        appendPoint(new Vector2i(context.getSource().getPlayer().getBlockX(), context.getSource().getPlayer().getBlockZ()))
                                 )
                         )
                         .then(ClientCommandManager.literal("commit")
                                 .executes(context ->
-                                        RegionCommand.commitCreation()
+                                        commitCreation()
                                 )
                         )
                         .then(ClientCommandManager.literal("discard")
                                 .executes(context ->
-                                        RegionCommand.discard()))
+                                        discard()))
                 );
     }
 

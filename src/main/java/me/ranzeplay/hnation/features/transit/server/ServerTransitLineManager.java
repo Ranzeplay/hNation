@@ -1,9 +1,11 @@
 package me.ranzeplay.hnation.features.transit.server;
 
+import me.ranzeplay.hnation.main.NetworkingIdentifier;
 import me.ranzeplay.hnation.main.ServerMain;
 import me.ranzeplay.hnation.features.transit.db.DbTransitLine;
 import me.ranzeplay.hnation.features.transit.db.TransitStatus;
 import me.ranzeplay.hnation.features.transit.utils.RailwayScanner;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -13,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class RailwayManager {
+public class ServerTransitLineManager {
     public static void scanRailwayPath(ServerPlayerEntity player, PacketByteBuf buf) {
         var pos = player.getSteppingPos().add(0, 1, 0);
         var state = player.getServerWorld().getBlockState(pos);
@@ -38,5 +40,13 @@ public class RailwayManager {
                 }
             }).start();
         }
+    }
+
+    public static void registerEvents() {
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.CREATE_TRANSIT_LINE_REQUEST,
+                (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    ServerTransitLineManager.scanRailwayPath(sender, packetByteBuf);
+                }
+        );
     }
 }
