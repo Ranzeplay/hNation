@@ -10,7 +10,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.sql.SQLException;
 
-public class GlobalChatServerHandler {
+public class ServerGlobalChatNetworking {
     public static void send(MinecraftServer server, ServerPlayerEntity sender, PacketByteBuf packetByteBuf) throws SQLException {
         var message = packetByteBuf.readString();
         var player = ServerMain.dbManager
@@ -30,7 +30,7 @@ public class GlobalChatServerHandler {
         ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SEND_CHAT_PUBLIC,
                 (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     try {
-                        GlobalChatServerHandler.send(minecraftServer, sender, packetByteBuf);
+                        ServerGlobalChatNetworking.send(minecraftServer, sender, packetByteBuf);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }

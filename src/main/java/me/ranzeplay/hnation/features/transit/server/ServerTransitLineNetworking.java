@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ServerTransitLineManager {
+public class ServerTransitLineNetworking {
     public static void scanRailwayPath(ServerPlayerEntity player, PacketByteBuf buf) {
         var pos = player.getSteppingPos().add(0, 1, 0);
         var state = player.getServerWorld().getBlockState(pos);
@@ -45,7 +45,7 @@ public class ServerTransitLineManager {
     public static void registerEvents() {
         ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.CREATE_TRANSIT_LINE_REQUEST,
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
-                    ServerTransitLineManager.scanRailwayPath(sender, packetByteBuf);
+                    ServerTransitLineNetworking.scanRailwayPath(sender, packetByteBuf);
                 }
         );
     }

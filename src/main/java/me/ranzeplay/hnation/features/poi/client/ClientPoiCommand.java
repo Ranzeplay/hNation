@@ -21,14 +21,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
-public class POICommand {
+public class ClientPoiCommand {
     public static LiteralArgumentBuilder<FabricClientCommandSource> buildCommandTree() {
         return ClientCommandManager.literal("poi")
                 .then(ClientCommandManager.literal("create")
                         .then(ClientCommandManager.literal("here")
                                 .then(ClientCommandManager.argument("name", StringArgumentType.string())
                                         .executes(context ->
-                                                POICommand.create(context.getSource().getPlayer().getBlockX(),
+                                                ClientPoiCommand.create(context.getSource().getPlayer().getBlockX(),
                                                         context.getSource().getPlayer().getBlockY(),
                                                         context.getSource().getPlayer().getBlockZ(),
                                                         context.getSource().getPlayer().getWorld().getDimensionKey().getValue().toString(),
@@ -43,7 +43,7 @@ public class POICommand {
                                                 .then(ClientCommandManager.argument("z", IntegerArgumentType.integer())
                                                         .then(ClientCommandManager.argument("name", StringArgumentType.string())
                                                                 .executes(context ->
-                                                                        POICommand.create(IntegerArgumentType.getInteger(context, "x"),
+                                                                        ClientPoiCommand.create(IntegerArgumentType.getInteger(context, "x"),
                                                                                 IntegerArgumentType.getInteger(context, "y"),
                                                                                 IntegerArgumentType.getInteger(context, "z"),
                                                                                 context.getSource().getPlayer().getWorld().getDimensionKey().getValue().toString(),
@@ -57,7 +57,7 @@ public class POICommand {
                         )
                 )
                 .then(ClientCommandManager.literal("query")
-                        .executes(context -> POICommand.query())
+                        .executes(context -> ClientPoiCommand.query())
                 );
     }
 

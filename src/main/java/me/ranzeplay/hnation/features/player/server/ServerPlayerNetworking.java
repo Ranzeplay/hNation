@@ -7,7 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.sql.SQLException;
 
-public class ServerPlayerHandler {
+public class ServerPlayerNetworking {
     public static void onPlayerJoin(ServerPlayerEntity player) throws SQLException {
         var dao = ServerMain.dbManager.getPlayerDao();
 
@@ -21,7 +21,7 @@ public class ServerPlayerHandler {
     public static void registerEvents() {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             try {
-                ServerPlayerHandler.onPlayerJoin(handler.getPlayer());
+                ServerPlayerNetworking.onPlayerJoin(handler.getPlayer());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

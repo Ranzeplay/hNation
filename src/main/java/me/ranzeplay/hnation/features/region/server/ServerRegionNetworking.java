@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ServerRegionHandler {
+public class ServerRegionNetworking {
     public static void create(ServerPlayerEntity player, PacketByteBuf buf) throws SQLException {
         var dao = ServerMain.dbManager.getRegionDao();
 
@@ -40,7 +40,7 @@ public class ServerRegionHandler {
         ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.CREATE_REGION_REQUEST,
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     try {
-                        ServerRegionHandler.create(sender, packetByteBuf);
+                        ServerRegionNetworking.create(sender, packetByteBuf);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }

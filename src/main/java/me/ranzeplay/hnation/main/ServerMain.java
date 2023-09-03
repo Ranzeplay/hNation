@@ -1,13 +1,13 @@
 package me.ranzeplay.hnation.main;
 
 import me.ranzeplay.hnation.db.DatabaseManager;
-import me.ranzeplay.hnation.features.communication.messaging.global.server.GlobalChatServerHandler;
+import me.ranzeplay.hnation.features.communication.messaging.global.server.ServerGlobalChatNetworking;
 import me.ranzeplay.hnation.features.communication.squad.SquadManager;
 import me.ranzeplay.hnation.features.communication.squad.server.SquadServerHandler;
-import me.ranzeplay.hnation.features.player.server.ServerPlayerHandler;
+import me.ranzeplay.hnation.features.player.server.ServerPlayerNetworking;
 import me.ranzeplay.hnation.features.poi.server.ServerPOIHandler;
-import me.ranzeplay.hnation.features.region.server.ServerRegionHandler;
-import me.ranzeplay.hnation.features.transit.server.ServerTransitLineManager;
+import me.ranzeplay.hnation.features.region.server.ServerRegionNetworking;
+import me.ranzeplay.hnation.features.transit.server.ServerTransitLineNetworking;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -41,13 +41,13 @@ public class ServerMain implements DedicatedServerModInitializer {
     }
 
     private void registerNetworkingHandlers() {
-        ServerPlayerHandler.registerEvents();
+        ServerPlayerNetworking.registerEvents();
 
         ServerPOIHandler.registerEvents();
-        ServerRegionHandler.registerEvents();
-        ServerTransitLineManager.registerEvents();
+        ServerRegionNetworking.registerEvents();
+        ServerTransitLineNetworking.registerEvents();
 
-        GlobalChatServerHandler.registerEvents();
+        ServerGlobalChatNetworking.registerEvents();
         SquadServerHandler.registerEvents();
     }
 }

@@ -7,9 +7,9 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 @Environment(EnvType.CLIENT)
-public class TransitCommand {
+public class ClientTransitCommand {
     public static LiteralArgumentBuilder<FabricClientCommandSource> buildCommandTree() {
         return ClientCommandManager.literal("transit")
-                .then(TransitLineCommand.buildCommandTree());
+                .then(ClientTransitLineCommand.buildCommandTree());
     }
 }

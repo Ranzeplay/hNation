@@ -12,7 +12,7 @@ import net.minecraft.network.PacketByteBuf;
 import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
-public class ChannelCommand {
+public class ClientChannelCommand {
     public static LiteralArgumentBuilder<FabricClientCommandSource> buildCommandTree() {
         return ClientCommandManager.literal("channel")
                 .then(ClientCommandManager.literal("create"))

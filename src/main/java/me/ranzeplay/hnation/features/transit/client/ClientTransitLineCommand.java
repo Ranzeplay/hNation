@@ -12,13 +12,13 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 
 @Environment(EnvType.CLIENT)
-public class TransitLineCommand {
+public class ClientTransitLineCommand {
     public static LiteralArgumentBuilder<FabricClientCommandSource> buildCommandTree() {
         return ClientCommandManager.literal("line")
                 .then(ClientCommandManager.literal("create")
                         .then(ClientCommandManager.argument("name", StringArgumentType.string())
                                 .executes(context ->
-                                        TransitLineCommand.createTransitLine(StringArgumentType.getString(context, "name"))
+                                        ClientTransitLineCommand.createTransitLine(StringArgumentType.getString(context, "name"))
                                 )
                         )
                 );
