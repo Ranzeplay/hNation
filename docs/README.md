@@ -1,20 +1,14 @@
-# hNation wiki
+# hNation docs
 
 The ultimate server management solution for Minecraft SMP servers running on Fabric.
-
-
 
 > ALL features are unavailable due to the initial development.
 > 
 > Expected to be finished in Jun. 2024
 
-
-
 ## Basic information
 
 - GitHub repository: [Ranzeplay/hNation](https://github.com/Ranzeplay/hNation)
-
-
 
 ## Features
 
