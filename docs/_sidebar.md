@@ -5,7 +5,7 @@
   * [POI](/features/poi)
   * [Region](/features/region)
   * Transit
-    * Transit line
+    * [Transit line](/features/transit/transit_line)
     * Navigation
   * Player management
     * Blacklist

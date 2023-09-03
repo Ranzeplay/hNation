@@ -4,7 +4,7 @@
 
 The transit line, mostly railways. Will consider adding boat and elytra (refer to Airspace) transportation methods later.
 
-## Create line
+## Create a line
 
 Command: `/hnt transit line create <name>`
 
@@ -23,5 +23,3 @@ The scan is based on DFS algorithm, if you have better ideas, we are pleased to 
 Consider a long railway and a short view-distance on client. If the game client is unable to load all chunks the railway line passed, the search process will be interrupted. So it is a better choice to scan the route on server-side.
 
 Consider a really long railway route, which world cost a long time to scan. So we use an individual thread to do this job. When the scan is complete, server will notify the player who submitted the creation of the railway.
-
-
