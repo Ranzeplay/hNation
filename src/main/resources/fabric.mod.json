@@ -13,13 +13,13 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "me.ranzeplay.hnation.client.ClientMain"
+      "me.ranzeplay.hnation.main.ClientMain"
     ],
     "main": [
-      "me.ranzeplay.hnation.general.GeneralMain"
+      "me.ranzeplay.hnation.main.GeneralMain"
     ],
     "server": [
-      "me.ranzeplay.hnation.server.ServerMain"
+      "me.ranzeplay.hnation.main.ServerMain"
     ]
   },
   "mixins": [
