@@ -6,18 +6,18 @@ A location represents something by someone
 
 ### Method 1
 
-Command: `/hnt poi create at <name> <x> <y> <z>`
+**Command:** `/hnt poi create at <name> <x> <y> <z>`
 
 Create a POI with name and location specified, the POI will be created in player's current world.
 
 ### Method 2
 
-Command: `/hnt poi create here <name>`
+**Command:** `/hnt poi create here <name>`
 
 Create the POI at player's current location
 
-## List
+## List all POIs
 
-Command: `/hnt poi list [query]`
+**Command:** `/hnt poi list [query]`
 
 List all POIs

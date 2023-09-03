@@ -6,7 +6,7 @@ The transit line, mostly railways. Will consider adding boat and elytra (refer t
 
 ## Create a line
 
-Command: `/hnt transit line create <name>`
+**Command:** `/hnt transit line create <name>`
 
 Create a railway transport line with name of text in `<name>` parameter.
 

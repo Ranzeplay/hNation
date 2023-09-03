@@ -6,7 +6,7 @@ A space with virtual border that can be assigned to different usages.
 
 ### Step 1: Initiate creation process
 
-Command: `/hnt region create declare <name> <minY> <maxY>`
+**Command:** `/hnt region create declare <name> <minY> <maxY>`
 
 #### Parameters
 
@@ -16,7 +16,7 @@ Command: `/hnt region create declare <name> <minY> <maxY>`
 
 ### Step 2: Add border points
 
-Command:  `/hnt region create add`
+**Command:**  `/hnt region create add`
 
 Add a border point at where player stands
 
@@ -24,19 +24,19 @@ Re-run this commands until you marked all the border points
 
 ### Step 3: Commit changes
 
-Command: `/hnt region create commit`
+**Command:** `/hnt region create commit`
 
 Finish the creation process, the region will be send and save to server database
 
 ### Discard changes
 
-Command: `/hnt region create discard`
+**Command:** `/hnt region create discard`
 
 Cancel the operation
 
 ## Role allocation
 
-Command: `/hnt region role set <roleName>`
+**Command:** `/hnt region role set <roleName>`
 
 Allocate region a role so that you can better control it.
 

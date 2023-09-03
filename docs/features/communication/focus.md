@@ -8,7 +8,7 @@ You can use the command to swich between different chat focus mode, the mode wil
 
 ## Usage
 
-Command: `/hnt chat focus <global|direct|channel|squad> [param]`
+**Command:** `/hnt chat focus <global|direct|channel|squad> [param]`
 
 ### Parameters
 
@@ -21,5 +21,3 @@ When focused to `direct` or `channel`, the `param` should be set as followed
 #### Direct focus
 
 `param` should be the target player name.
-
-

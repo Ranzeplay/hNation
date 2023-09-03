@@ -12,7 +12,7 @@ All squads will be deleted when server closed, because they are all stored in me
 
 ## Create
 
-Command: `/hnt squad create`
+**Command:** `/hnt squad create`
 
 ## Invite player
 
@@ -24,19 +24,19 @@ If a team member invoked the command, it will be sent to team leader for the lea
 
 ## Kick player
 
-Command: `/hnt squad kick <playerName>`
+**Command:** `/hnt squad kick <playerName>`
 
 The command can only be invoked by team leader
 
 ## Leave squad
 
-Command: `/hnt squad leave`
+**Command:** `/hnt squad leave`
 
 Team leader can't leave the squad unless he/she has transfered leadership to another player.
 
 ## Dismiss squad
 
-Command: `/hnt squad dismiss`
+**Command:** `/hnt squad dismiss`
 
 Just dismiss the squad, all players removed.
 
