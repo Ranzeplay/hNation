@@ -3,7 +3,7 @@ package me.ranzeplay.hnation.main;
 import me.ranzeplay.hnation.db.DatabaseManager;
 import me.ranzeplay.hnation.features.communication.messaging.global.server.ServerGlobalChatNetworking;
 import me.ranzeplay.hnation.features.communication.squad.SquadManager;
-import me.ranzeplay.hnation.features.communication.squad.server.SquadServerHandler;
+import me.ranzeplay.hnation.features.communication.squad.server.SquadCommandServerHandler;
 import me.ranzeplay.hnation.features.player.server.ServerPlayerNetworking;
 import me.ranzeplay.hnation.features.poi.server.ServerPOIHandler;
 import me.ranzeplay.hnation.features.region.server.ServerRegionNetworking;
@@ -48,6 +48,6 @@ public class ServerMain implements DedicatedServerModInitializer {
         ServerTransitLineNetworking.registerEvents();
 
         ServerGlobalChatNetworking.registerEvents();
-        SquadServerHandler.registerEvents();
+        SquadCommandServerHandler.registerEvents();
     }
 }

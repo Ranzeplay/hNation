@@ -13,7 +13,7 @@ import net.minecraft.text.Text;
 
 import java.sql.SQLException;
 
-public class SquadServerHandler {
+public class SquadCommandServerHandler {
     public static void createSquad(ServerPlayerEntity sender, PacketByteBuf packetByteBuf) throws SQLException {
         var nbt = packetByteBuf.readNbt();
         assert nbt != null;
@@ -65,6 +65,8 @@ public class SquadServerHandler {
                 squad.invitePlayer(player.getId());
 
                 sender.sendMessage(Text.literal("Request has been sent"));
+            } else if (squad.getInvitations().containsKey(player.getId())) {
+                ServerMain.squadManager.joinSquad(squadId, player.getId());
             }
         }
     }
@@ -73,7 +75,7 @@ public class SquadServerHandler {
         ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_CREATE_REQUEST,
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     try {
-                        SquadServerHandler.createSquad(sender, packetByteBuf);
+                        SquadCommandServerHandler.createSquad(sender, packetByteBuf);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }

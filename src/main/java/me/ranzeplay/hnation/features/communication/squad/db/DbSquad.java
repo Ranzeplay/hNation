@@ -31,6 +31,9 @@ public class DbSquad {
 
     public void joinPlayer(DbPlayer player) {
         members.put(player.getId(), player);
+
+        joinRequests.remove(player.getId());
+        invitations.remove(player.getId());
     }
 
     public void dropPlayer(DbPlayer player) {
