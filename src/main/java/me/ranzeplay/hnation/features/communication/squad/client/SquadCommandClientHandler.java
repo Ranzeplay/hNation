@@ -61,7 +61,7 @@ public class SquadCommandClientHandler {
     }
 
     public static int create() {
-        if (isInSquad()) {
+        if (!isInSquad()) {
             var player = Objects.requireNonNull(MinecraftClient.getInstance().player);
             var squad = new DbSquad(new DbPlayer(player.getUuid(), player.getEntityName()));
 
