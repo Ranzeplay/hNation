@@ -30,9 +30,6 @@ public class SquadCommandServerHandler {
     }
 
     public static void invitePlayerToSquad(MinecraftServer server, ServerPlayerEntity sender, PacketByteBuf packetByteBuf) throws SQLException {
-        var player = ServerMain.dbManager
-                .getPlayerDao()
-                .queryForId(sender.getUuid());
         var targetPlayerName = packetByteBuf.readString();
         var targetDbPlayer = ServerMain.dbManager
                 .getPlayerDao()
@@ -43,7 +40,7 @@ public class SquadCommandServerHandler {
                         .prepare()
                 );
         // Check if player is the leader of a squad
-        var squad = ServerMain.squadManager.getLeadingSquad(player);
+        var squad = ServerMain.squadManager.getLeadingSquad(sender);
         if (squad != null) {
             var targetPlayer = server.getPlayerManager().getPlayer(targetDbPlayer.getId());
             if (!squad.getInvitations().containsKey(targetDbPlayer.getId()) && targetPlayer != null) {
@@ -71,6 +68,57 @@ public class SquadCommandServerHandler {
         }
     }
 
+    public static void playerSendMessage(MinecraftServer server, ServerPlayerEntity sender, PacketByteBuf packetByteBuf) throws SQLException {
+        var squad = ServerMain.squadManager.getPlayerInSquad(sender);
+        var message = packetByteBuf.readString();
+
+        squad.getMembers().forEach((u, p) -> {
+            var pn = server.getPlayerManager().getPlayer(u);
+            assert pn != null;
+            ServerPlayNetworking.send(pn, NetworkingIdentifier.SQUAD_MESSAGE_NOTIFY, PacketByteBufs.create().writeUuid(sender.getUuid()).writeString(message));
+        });
+    }
+
+    public static void playerLeaveSquad(MinecraftServer server, ServerPlayerEntity sender) throws SQLException {
+        var player = ServerMain.dbManager
+                .getPlayerDao()
+                .queryForId(sender.getUuid());
+        var squad = ServerMain.squadManager.getPlayerInSquad(player);
+        squad.dropPlayer(player);
+
+        // Notify each player of the leave event
+        squad.getMembers().forEach((u, p) -> {
+            var pn = server.getPlayerManager().getPlayer(u);
+            assert pn != null;
+            ServerPlayNetworking.send(pn, NetworkingIdentifier.SQUAD_LEAVE_NOTIFY, PacketByteBufs.create().writeString(player.getName()));
+        });
+    }
+
+    public static void kickPlayer(MinecraftServer server, ServerPlayerEntity sender, PacketByteBuf packetByteBuf) {
+        var squad = ServerMain.squadManager.getLeadingSquad(sender);
+        var target = server.getPlayerManager().getPlayer(packetByteBuf.readString());
+        assert target != null;
+
+        // Notify each player of the kick event
+        squad.getMembers().forEach((u, p) -> {
+            var player = server.getPlayerManager().getPlayer(u);
+            assert player != null;
+            ServerPlayNetworking.send(player, NetworkingIdentifier.SQUAD_KICK_NOTIFY, PacketByteBufs.create().writeString(target.getEntityName()));
+        });
+
+        squad.dropPlayer(target.getUuid());
+    }
+
+    public static void warnPlayer(MinecraftServer server, ServerPlayerEntity sender, PacketByteBuf packetByteBuf) {
+        var target = server.getPlayerManager().getPlayer(packetByteBuf.readString());
+        var reason = packetByteBuf.readString();
+        var squad = ServerMain.squadManager.getLeadingSquad(sender);
+        if (squad != null) {
+            assert target != null;
+            ServerPlayNetworking.send(target, NetworkingIdentifier.SQUAD_WARN_NOTIFY, PacketByteBufs.create().writeString(reason));
+        }
+    }
+
     public static void registerEvents() {
         ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_CREATE_REQUEST,
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
@@ -79,6 +127,48 @@ public class SquadCommandServerHandler {
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_INVITE_REQUEST,
+                (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    try {
+                        SquadCommandServerHandler.invitePlayerToSquad(minecraftServer, sender, packetByteBuf);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_KICK_REQUEST,
+                (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    SquadCommandServerHandler.kickPlayer(minecraftServer, sender, packetByteBuf);
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_JOIN_REQUEST,
+                (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    try {
+                        SquadCommandServerHandler.playerJoinSquadRequest(sender, packetByteBuf);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_LEAVE_REQUEST,
+                (minecraftServer, sender, _serverPlayNetworkHandler, _packetByteBuf, _packetSender) -> {
+                    try {
+                        SquadCommandServerHandler.playerLeaveSquad(minecraftServer, sender);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_WARN_REQUEST,
+                (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    SquadCommandServerHandler.warnPlayer(minecraftServer, sender, packetByteBuf);
                 }
         );
     }

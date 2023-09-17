@@ -40,6 +40,7 @@ public class NetworkingIdentifier {
     public static final Identifier SQUAD_WARN_REQUEST = new Identifier("hnation.networking.request", "squad/warn");
     public static final Identifier SQUAD_WARN_NOTIFY = new Identifier("hnation.networking.notify", "squad/warn");
     public static final Identifier SQUAD_STATUS_SYNC = new Identifier("hnation.networking.sync", "squad/status");
+    public static final Identifier SQUAD_MESSAGE_NOTIFY = new Identifier("hnation.networking.notify", "squad/message");
 
     public static final Identifier CREATE_TRANSIT_LINE_REQUEST = new Identifier("hnation.networking.request", "transit/line/create");
     public static final Identifier CREATE_TRANSIT_LINE_REPLY = new Identifier("hnation.networking.reply", "transit/line/create");

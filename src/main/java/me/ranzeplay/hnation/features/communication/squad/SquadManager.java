@@ -4,6 +4,7 @@ import me.ranzeplay.hnation.features.communication.squad.db.DbSquad;
 import me.ranzeplay.hnation.features.communication.squad.tasks.SquadDismissTask;
 import me.ranzeplay.hnation.features.player.db.DbPlayer;
 import me.ranzeplay.hnation.main.ServerMain;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -39,11 +40,30 @@ public class SquadManager {
                 .orElse(null);
     }
 
+    public DbSquad getLeadingSquad(ServerPlayerEntity playerEntity) {
+        DbPlayer player;
+        try {
+            player = ServerMain.dbManager
+                    .getPlayerDao()
+                    .queryForId(playerEntity.getUuid());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return getLeadingSquad(player);
+    }
+
     public DbSquad getPlayerInSquad(DbPlayer player) {
         return squads.stream()
                 .filter(s -> s.getMembers().containsKey(player.getId()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public DbSquad getPlayerInSquad(ServerPlayerEntity playerEntity) throws SQLException {
+        var player = ServerMain.dbManager
+                .getPlayerDao()
+                .queryForId(playerEntity.getUuid());
+        return getPlayerInSquad(player);
     }
 
     public DbSquad getSquadById(UUID id) {
