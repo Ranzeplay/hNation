@@ -14,7 +14,7 @@
     - Announcement
     - [Global chat](/features/communication/global_chat)
     - [Direct chat](/features/communication/direct_chat)
-    - Squad
+    - [Squad](/features/communication/squad)
     - Channel
     - Mail
   * Vote
