@@ -1,5 +1,6 @@
 package me.ranzeplay.hnation.main;
 
+import me.ranzeplay.hnation.features.communication.ClientCommunicationHandler;
 import me.ranzeplay.hnation.features.communication.CommunicationFocusOption;
 import me.ranzeplay.hnation.features.communication.channel.client.ClientChannelCommand;
 import me.ranzeplay.hnation.features.communication.squad.client.SquadCommandClientHandler;
@@ -41,5 +42,6 @@ public class ClientMain implements ClientModInitializer {
     private void registerNetworkingHandlers() {
         ClientPoiNetworking.registerEvents();
         ClientRegionNetworking.registerEvents();
+        ClientCommunicationHandler.registerEvents();
     }
 }

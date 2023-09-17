@@ -1,6 +1,7 @@
 package me.ranzeplay.hnation.features.communication.messaging.global.server;
 
 import me.ranzeplay.hnation.features.communication.messaging.global.db.DbGlobalMessage;
+import me.ranzeplay.hnation.features.player.PlayerManager;
 import me.ranzeplay.hnation.main.NetworkingIdentifier;
 import me.ranzeplay.hnation.main.ServerMain;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -13,9 +14,7 @@ import java.sql.SQLException;
 public class ServerGlobalChatNetworking {
     public static void send(MinecraftServer server, ServerPlayerEntity sender, PacketByteBuf packetByteBuf) throws SQLException {
         var message = packetByteBuf.readString();
-        var player = ServerMain.dbManager
-                .getPlayerDao()
-                .queryForId(sender.getUuid());
+        var player = PlayerManager.getInstance().getPlayer(sender);
 
         var model = new DbGlobalMessage(message, player);
         ServerMain.dbManager.getPublicMessageDao().create(model);

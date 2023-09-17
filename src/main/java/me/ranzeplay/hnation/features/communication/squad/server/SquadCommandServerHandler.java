@@ -61,11 +61,12 @@ public class SquadCommandServerHandler {
     public static void playerSendMessage(MinecraftServer server, ServerPlayerEntity sender, PacketByteBuf packetByteBuf) {
         var squad = SquadManager.getInstance().getPlayerInSquad(sender);
         var message = packetByteBuf.readString();
+        var player = PlayerManager.getInstance().getPlayer(sender);
 
         squad.getMembers().forEach((u, p) -> {
             var pn = server.getPlayerManager().getPlayer(u);
             assert pn != null;
-            ServerPlayNetworking.send(pn, NetworkingIdentifier.SQUAD_MESSAGE_NOTIFY, PacketByteBufs.create().writeUuid(sender.getUuid()).writeString(message));
+            ServerPlayNetworking.send(pn, NetworkingIdentifier.SQUAD_MESSAGE_NOTIFY, PacketByteBufs.create().writeString(player.getName()).writeString(message));
         });
     }
 
@@ -141,6 +142,12 @@ public class SquadCommandServerHandler {
         ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_WARN_REQUEST,
                 (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     SquadCommandServerHandler.warnPlayer(minecraftServer, sender, packetByteBuf);
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SEND_CHAT_SQUAD,
+                (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    SquadCommandServerHandler.playerSendMessage(minecraftServer, sender, packetByteBuf);
                 }
         );
     }
