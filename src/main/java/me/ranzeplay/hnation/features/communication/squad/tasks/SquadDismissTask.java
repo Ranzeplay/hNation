@@ -1,5 +1,6 @@
 package me.ranzeplay.hnation.features.communication.squad.tasks;
 
+import me.ranzeplay.hnation.features.communication.squad.SquadManager;
 import me.ranzeplay.hnation.main.ServerMain;
 
 import java.util.TimerTask;
@@ -14,6 +15,6 @@ public class SquadDismissTask extends TimerTask {
 
     @Override
     public void run() {
-        ServerMain.squadManager.dismissSquad(squadId);
+        SquadManager.getInstance().dismissSquad(squadId);
     }
 }

@@ -4,6 +4,7 @@ import me.ranzeplay.hnation.db.DatabaseManager;
 import me.ranzeplay.hnation.features.communication.messaging.global.server.ServerGlobalChatNetworking;
 import me.ranzeplay.hnation.features.communication.squad.SquadManager;
 import me.ranzeplay.hnation.features.communication.squad.server.SquadCommandServerHandler;
+import me.ranzeplay.hnation.features.player.PlayerManager;
 import me.ranzeplay.hnation.features.player.server.ServerPlayerNetworking;
 import me.ranzeplay.hnation.features.poi.server.ServerPOIHandler;
 import me.ranzeplay.hnation.features.region.server.ServerRegionNetworking;
@@ -17,8 +18,6 @@ import java.sql.SQLException;
 
 public class ServerMain implements DedicatedServerModInitializer {
     public static DatabaseManager dbManager = null;
-
-    public static SquadManager squadManager = null;
 
     @Override
     public void onInitializeServer() {
@@ -37,7 +36,8 @@ public class ServerMain implements DedicatedServerModInitializer {
             throw new RuntimeException(e);
         }
 
-        squadManager = new SquadManager();
+        new PlayerManager(dbManager.getPlayerDao());
+        new SquadManager();
     }
 
     private void registerNetworkingHandlers() {

@@ -2,27 +2,33 @@ package me.ranzeplay.hnation.features.communication.squad;
 
 import me.ranzeplay.hnation.features.communication.squad.db.DbSquad;
 import me.ranzeplay.hnation.features.communication.squad.tasks.SquadDismissTask;
+import me.ranzeplay.hnation.features.player.PlayerManager;
 import me.ranzeplay.hnation.features.player.db.DbPlayer;
-import me.ranzeplay.hnation.main.ServerMain;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.UUID;
 
 public class SquadManager {
+    private static SquadManager INSTANCE = null;
+
     public ArrayList<DbSquad> squads;
     public HashMap<UUID, Timer> dismissTasks;
 
     public SquadManager() {
         squads = new ArrayList<>();
         dismissTasks = new HashMap<>();
+        INSTANCE = this;
     }
 
-    public boolean createSquad(DbPlayer player, DbSquad squad) {
-        if (!isPlayerInSquad(player)) {
+    public static SquadManager getInstance() {
+        return INSTANCE;
+    }
+
+    public boolean createSquad(DbPlayer leader, DbSquad squad) {
+        if (!isPlayerInSquad(leader)) {
             return squads.add(squad);
         }
 
@@ -30,7 +36,8 @@ public class SquadManager {
     }
 
     public boolean isPlayerInSquad(DbPlayer player) {
-        return squads.stream().anyMatch(s -> s.getMembers().containsKey(player.getId()));
+        return squads.stream()
+                .anyMatch(s -> s.getMembers().containsKey(player.getId()));
     }
 
     public DbSquad getLeadingSquad(DbPlayer player) {
@@ -42,13 +49,7 @@ public class SquadManager {
 
     public DbSquad getLeadingSquad(ServerPlayerEntity playerEntity) {
         DbPlayer player;
-        try {
-            player = ServerMain.dbManager
-                    .getPlayerDao()
-                    .queryForId(playerEntity.getUuid());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        player = PlayerManager.getInstance().getPlayer(playerEntity);
         return getLeadingSquad(player);
     }
 
@@ -59,10 +60,8 @@ public class SquadManager {
                 .orElse(null);
     }
 
-    public DbSquad getPlayerInSquad(ServerPlayerEntity playerEntity) throws SQLException {
-        var player = ServerMain.dbManager
-                .getPlayerDao()
-                .queryForId(playerEntity.getUuid());
+    public DbSquad getPlayerInSquad(ServerPlayerEntity playerEntity) {
+        var player = PlayerManager.getInstance().getPlayer(playerEntity);
         return getPlayerInSquad(player);
     }
 
@@ -89,20 +88,16 @@ public class SquadManager {
         dismissTasks.get(squadId).cancel();
     }
 
-    public void joinSquad(UUID squadId, UUID playerId) throws SQLException {
+    public void joinSquad(UUID squadId, UUID playerId) {
         var squad = getSquadById(squadId);
-        var player = ServerMain.dbManager
-                .getPlayerDao()
-                .queryForId(playerId);
+        var player = PlayerManager.getInstance().getPlayer(playerId);
 
         squad.joinPlayer(player);
     }
 
-    public void transferOwnership(UUID squadId, UUID newLeaderPlayerId) throws SQLException {
+    public void transferOwnership(UUID squadId, UUID newLeaderPlayerId) {
         var squad = getSquadById(squadId);
-        var newLeader = ServerMain.dbManager
-                .getPlayerDao()
-                .queryForId(newLeaderPlayerId);
+        var newLeader = PlayerManager.getInstance().getPlayer(newLeaderPlayerId);
 
         squad.transferLeader(newLeader);
     }
