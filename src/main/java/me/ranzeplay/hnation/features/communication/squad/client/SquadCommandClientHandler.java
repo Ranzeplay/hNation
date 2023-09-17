@@ -6,7 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.ranzeplay.hnation.features.communication.squad.db.DbSquad;
 import me.ranzeplay.hnation.features.player.db.DbPlayer;
 import me.ranzeplay.hnation.main.ClientMain;
-import me.ranzeplay.hnation.main.NetworkingIdentifier;
+import me.ranzeplay.hnation.networking.SquadIdentifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
@@ -65,7 +65,7 @@ public class SquadCommandClientHandler {
             var player = Objects.requireNonNull(MinecraftClient.getInstance().player);
             var squad = new DbSquad(new DbPlayer(player.getUuid(), player.getEntityName()));
 
-            ClientPlayNetworking.send(NetworkingIdentifier.SQUAD_CREATE_REQUEST, PacketByteBufs.create().writeNbt(squad.toNbt()));
+            ClientPlayNetworking.send(SquadIdentifier.SQUAD_CREATE_REQUEST, PacketByteBufs.create().writeNbt(squad.toNbt()));
         }
         return Command.SINGLE_SUCCESS;
     }
@@ -73,14 +73,14 @@ public class SquadCommandClientHandler {
     public static int join(String idString) {
         if (!isInSquad()) {
             var squadId = UUID.fromString(idString);
-            ClientPlayNetworking.send(NetworkingIdentifier.SQUAD_JOIN_REQUEST, PacketByteBufs.create().writeUuid(squadId));
+            ClientPlayNetworking.send(SquadIdentifier.SQUAD_JOIN_REQUEST, PacketByteBufs.create().writeUuid(squadId));
         }
         return Command.SINGLE_SUCCESS;
     }
 
     public static int leave() {
         if (isInSquad()) {
-            ClientPlayNetworking.send(NetworkingIdentifier.SQUAD_LEAVE_REQUEST, PacketByteBufs.create());
+            ClientPlayNetworking.send(SquadIdentifier.SQUAD_LEAVE_REQUEST, PacketByteBufs.create());
         }
 
         return Command.SINGLE_SUCCESS;
@@ -88,7 +88,7 @@ public class SquadCommandClientHandler {
 
     public static int invite(String playerName) {
         if (hasLeaderPermission()) {
-            ClientPlayNetworking.send(NetworkingIdentifier.SQUAD_INVITE_REQUEST, PacketByteBufs.create().writeString(playerName));
+            ClientPlayNetworking.send(SquadIdentifier.SQUAD_INVITE_REQUEST, PacketByteBufs.create().writeString(playerName));
         }
 
         return Command.SINGLE_SUCCESS;
@@ -96,7 +96,7 @@ public class SquadCommandClientHandler {
 
     public static int dismiss() {
         if (hasLeaderPermission()) {
-            ClientPlayNetworking.send(NetworkingIdentifier.SQUAD_DISMISS_REQUEST, PacketByteBufs.create());
+            ClientPlayNetworking.send(SquadIdentifier.SQUAD_DISMISS_REQUEST, PacketByteBufs.create());
         }
 
         return Command.SINGLE_SUCCESS;
@@ -104,7 +104,7 @@ public class SquadCommandClientHandler {
 
     public static int kick(String playerName) {
         if (hasLeaderPermission()) {
-            ClientPlayNetworking.send(NetworkingIdentifier.SQUAD_KICK_REQUEST, PacketByteBufs.create().writeString(playerName));
+            ClientPlayNetworking.send(SquadIdentifier.SQUAD_KICK_REQUEST, PacketByteBufs.create().writeString(playerName));
         }
 
         return Command.SINGLE_SUCCESS;
@@ -113,7 +113,7 @@ public class SquadCommandClientHandler {
     public static int warn(String playerName, String reason) {
         if (hasLeaderPermission()) {
             ClientPlayNetworking.send(
-                    NetworkingIdentifier.SQUAD_KICK_REQUEST,
+                    SquadIdentifier.SQUAD_KICK_REQUEST,
                     PacketByteBufs.create()
                             .writeString(playerName)
                             .writeString(reason)

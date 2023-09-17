@@ -1,10 +1,10 @@
 package me.ranzeplay.hnation.features.communication;
 
-import me.ranzeplay.hnation.features.communication.squad.client.ClientSquadMessageNetworking;
+import me.ranzeplay.hnation.features.communication.squad.client.SquadClientNetworking;
 import me.ranzeplay.hnation.main.ClientMain;
 
 import static me.ranzeplay.hnation.features.communication.messaging.global.client.ClientGlobalMessageNetworking.sendPublic;
-import static me.ranzeplay.hnation.features.communication.squad.client.ClientSquadMessageNetworking.sendSquad;
+import static me.ranzeplay.hnation.features.communication.squad.client.SquadClientNetworking.sendSquad;
 
 public class ClientCommunicationHandler {
     public static void handle(String message) {
@@ -19,6 +19,6 @@ public class ClientCommunicationHandler {
     }
 
     public static void registerEvents() {
-        ClientSquadMessageNetworking.registerEvents();
+        SquadClientNetworking.registerEvents();
     }
 }

@@ -4,8 +4,8 @@ import me.ranzeplay.hnation.features.communication.squad.SquadManager;
 import me.ranzeplay.hnation.features.communication.squad.db.DbSquad;
 import me.ranzeplay.hnation.features.communication.squad.viewmodel.SquadCreationReplyViewModel;
 import me.ranzeplay.hnation.features.player.PlayerManager;
-import me.ranzeplay.hnation.main.NetworkingIdentifier;
-import me.ranzeplay.hnation.main.ServerMain;
+import me.ranzeplay.hnation.networking.ChatIdentifier;
+import me.ranzeplay.hnation.networking.SquadIdentifier;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -21,10 +21,10 @@ public class SquadCommandServerHandler {
         var player = PlayerManager.getInstance().getPlayer(sender);
         var success = SquadManager.getInstance().createSquad(player, squad);
         if (success) {
-            ServerPlayNetworking.send(sender, NetworkingIdentifier.SQUAD_CREATE_REPLY,
+            ServerPlayNetworking.send(sender, SquadIdentifier.SQUAD_CREATE_REPLY,
                     PacketByteBufs.create().writeNbt(new SquadCreationReplyViewModel(true, "").toNbt()));
         } else {
-            ServerPlayNetworking.send(sender, NetworkingIdentifier.SQUAD_CREATE_REPLY,
+            ServerPlayNetworking.send(sender, SquadIdentifier.SQUAD_CREATE_REPLY,
                     PacketByteBufs.create().writeNbt(new SquadCreationReplyViewModel(false, "Failed to create a squad").toNbt()));
         }
     }
@@ -66,7 +66,7 @@ public class SquadCommandServerHandler {
         squad.getMembers().forEach((u, p) -> {
             var pn = server.getPlayerManager().getPlayer(u);
             assert pn != null;
-            ServerPlayNetworking.send(pn, NetworkingIdentifier.SQUAD_MESSAGE_NOTIFY, PacketByteBufs.create().writeString(player.getName()).writeString(message));
+            ServerPlayNetworking.send(pn, SquadIdentifier.SQUAD_MESSAGE_NOTIFY, PacketByteBufs.create().writeString(player.getName()).writeString(message));
         });
     }
 
@@ -79,7 +79,7 @@ public class SquadCommandServerHandler {
         squad.getMembers().forEach((u, p) -> {
             var pn = server.getPlayerManager().getPlayer(u);
             assert pn != null;
-            ServerPlayNetworking.send(pn, NetworkingIdentifier.SQUAD_LEAVE_NOTIFY, PacketByteBufs.create().writeString(player.getName()));
+            ServerPlayNetworking.send(pn, SquadIdentifier.SQUAD_LEAVE_NOTIFY, PacketByteBufs.create().writeString(player.getName()));
         });
     }
 
@@ -92,7 +92,7 @@ public class SquadCommandServerHandler {
         squad.getMembers().forEach((u, p) -> {
             var player = server.getPlayerManager().getPlayer(u);
             assert player != null;
-            ServerPlayNetworking.send(player, NetworkingIdentifier.SQUAD_KICK_NOTIFY, PacketByteBufs.create().writeString(target.getName()));
+            ServerPlayNetworking.send(player, SquadIdentifier.SQUAD_KICK_NOTIFY, PacketByteBufs.create().writeString(target.getName()));
         });
 
         squad.dropPlayer(target.getId());
@@ -104,48 +104,48 @@ public class SquadCommandServerHandler {
         var squad = SquadManager.getInstance().getLeadingSquad(sender);
         if (squad != null) {
             assert target != null;
-            ServerPlayNetworking.send(target, NetworkingIdentifier.SQUAD_WARN_NOTIFY, PacketByteBufs.create().writeString(reason));
+            ServerPlayNetworking.send(target, SquadIdentifier.SQUAD_WARN_NOTIFY, PacketByteBufs.create().writeString(reason));
         }
     }
 
     public static void registerEvents() {
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_CREATE_REQUEST,
+        ServerPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_CREATE_REQUEST,
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     SquadCommandServerHandler.createSquad(sender, packetByteBuf);
                 }
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_INVITE_REQUEST,
+        ServerPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_INVITE_REQUEST,
                 (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     SquadCommandServerHandler.invitePlayerToSquad(minecraftServer, sender, packetByteBuf);
                 }
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_KICK_REQUEST,
+        ServerPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_KICK_REQUEST,
                 (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     SquadCommandServerHandler.kickPlayer(minecraftServer, sender, packetByteBuf);
                 }
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_JOIN_REQUEST,
+        ServerPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_JOIN_REQUEST,
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     SquadCommandServerHandler.playerJoinSquadRequest(sender, packetByteBuf);
                 }
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_LEAVE_REQUEST,
+        ServerPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_LEAVE_REQUEST,
                 (minecraftServer, sender, _serverPlayNetworkHandler, _packetByteBuf, _packetSender) -> {
                     SquadCommandServerHandler.playerLeaveSquad(minecraftServer, sender);
                 }
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SQUAD_WARN_REQUEST,
+        ServerPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_WARN_REQUEST,
                 (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     SquadCommandServerHandler.warnPlayer(minecraftServer, sender, packetByteBuf);
                 }
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SEND_CHAT_SQUAD,
+        ServerPlayNetworking.registerGlobalReceiver(ChatIdentifier.SEND_CHAT_SQUAD,
                 (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     SquadCommandServerHandler.playerSendMessage(minecraftServer, sender, packetByteBuf);
                 }

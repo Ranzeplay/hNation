@@ -2,8 +2,8 @@ package me.ranzeplay.hnation.features.communication.messaging.global.server;
 
 import me.ranzeplay.hnation.features.communication.messaging.global.db.DbGlobalMessage;
 import me.ranzeplay.hnation.features.player.PlayerManager;
-import me.ranzeplay.hnation.main.NetworkingIdentifier;
 import me.ranzeplay.hnation.main.ServerMain;
+import me.ranzeplay.hnation.networking.ChatIdentifier;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -26,7 +26,7 @@ public class ServerGlobalChatNetworking {
     }
 
     public static void registerEvents() {
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.SEND_CHAT_PUBLIC,
+        ServerPlayNetworking.registerGlobalReceiver(ChatIdentifier.SEND_CHAT_PUBLIC,
                 (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     try {
                         ServerGlobalChatNetworking.send(minecraftServer, sender, packetByteBuf);

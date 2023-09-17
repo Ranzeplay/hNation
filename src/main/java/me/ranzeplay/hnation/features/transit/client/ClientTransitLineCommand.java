@@ -3,7 +3,7 @@ package me.ranzeplay.hnation.features.transit.client;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import me.ranzeplay.hnation.main.NetworkingIdentifier;
+import me.ranzeplay.hnation.networking.TransitIdentifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
@@ -25,7 +25,7 @@ public class ClientTransitLineCommand {
     }
 
     public static int createTransitLine(String name) {
-        ClientPlayNetworking.send(NetworkingIdentifier.CREATE_TRANSIT_LINE_REQUEST, PacketByteBufs.create().writeString(name));
+        ClientPlayNetworking.send(TransitIdentifier.CREATE_TRANSIT_LINE_REQUEST, PacketByteBufs.create().writeString(name));
         return Command.SINGLE_SUCCESS;
     }
 }

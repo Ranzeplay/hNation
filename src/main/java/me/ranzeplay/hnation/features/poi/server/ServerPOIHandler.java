@@ -1,11 +1,11 @@
 package me.ranzeplay.hnation.features.poi.server;
 
-import me.ranzeplay.hnation.main.NetworkingIdentifier;
 import me.ranzeplay.hnation.features.poi.viewmodel.POICreationModel;
 import me.ranzeplay.hnation.features.poi.viewmodel.POIViewModel;
 import me.ranzeplay.hnation.features.poi.viewmodel.POIQueryViewModel;
 import me.ranzeplay.hnation.main.ServerMain;
 import me.ranzeplay.hnation.features.poi.db.DbPOI;
+import me.ranzeplay.hnation.networking.PoiIdentifier;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -49,11 +49,11 @@ public class ServerPOIHandler {
 
         var model = new POIQueryViewModel(list.toArray(new POIViewModel[0]));
 
-        ServerPlayNetworking.send(sender, NetworkingIdentifier.QUERY_POI_REPLY, PacketByteBufs.create().writeNbt(model.toNbt()));
+        ServerPlayNetworking.send(sender, PoiIdentifier.QUERY_POI_REPLY, PacketByteBufs.create().writeNbt(model.toNbt()));
     }
 
     public static void registerEvents() {
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.CREATE_POI_REQUEST,
+        ServerPlayNetworking.registerGlobalReceiver(PoiIdentifier.CREATE_POI_REQUEST,
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     try {
                         ServerPOIHandler.create(sender, packetByteBuf);
@@ -63,7 +63,7 @@ public class ServerPOIHandler {
                 }
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.QUERY_POI_REQUEST,
+        ServerPlayNetworking.registerGlobalReceiver(PoiIdentifier.QUERY_POI_REQUEST,
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     ServerPOIHandler.query(sender);
                 }

@@ -2,8 +2,8 @@ package me.ranzeplay.hnation.features.region.server;
 
 import me.ranzeplay.hnation.features.region.db.DbRegion;
 import me.ranzeplay.hnation.features.region.viewmodel.RegionCreationModel;
-import me.ranzeplay.hnation.main.NetworkingIdentifier;
 import me.ranzeplay.hnation.main.ServerMain;
+import me.ranzeplay.hnation.networking.RegionIdentifier;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -33,11 +33,11 @@ public class ServerRegionNetworking {
 
         dao.create(region);
 
-        ServerPlayNetworking.send(player, NetworkingIdentifier.CREATE_REGION_REPLY, PacketByteBufs.create());
+        ServerPlayNetworking.send(player, RegionIdentifier.CREATE_REGION_REPLY, PacketByteBufs.create());
     }
 
     public static void registerEvents() {
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifier.CREATE_REGION_REQUEST,
+        ServerPlayNetworking.registerGlobalReceiver(RegionIdentifier.CREATE_REGION_REQUEST,
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     try {
                         ServerRegionNetworking.create(sender, packetByteBuf);

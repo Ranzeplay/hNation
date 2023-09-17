@@ -4,9 +4,9 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import me.ranzeplay.hnation.main.NetworkingIdentifier;
 import me.ranzeplay.hnation.features.poi.viewmodel.POICreationModel;
 import me.ranzeplay.hnation.features.poi.viewmodel.POIQueryViewModel;
+import me.ranzeplay.hnation.networking.PoiIdentifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
@@ -66,13 +66,13 @@ public class ClientPoiCommand {
         MinecraftClient.getInstance().player.sendMessage(Text.of("Creating POI \"" + name + "\" at [" + x + ", " + y + ", " + z + " @ " + worldName + "]"));
 
         var model = new POICreationModel(x, y, z, worldName, name, playerUuid);
-        ClientPlayNetworking.send(NetworkingIdentifier.CREATE_POI_REQUEST, PacketByteBufs.create().writeNbt(model.toNbt()));
+        ClientPlayNetworking.send(PoiIdentifier.CREATE_POI_REQUEST, PacketByteBufs.create().writeNbt(model.toNbt()));
 
         return Command.SINGLE_SUCCESS;
     }
 
     public static int query() {
-        ClientPlayNetworking.send(NetworkingIdentifier.QUERY_POI_REQUEST, PacketByteBufs.create());
+        ClientPlayNetworking.send(PoiIdentifier.QUERY_POI_REQUEST, PacketByteBufs.create());
         return Command.SINGLE_SUCCESS;
     }
 

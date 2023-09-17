@@ -4,8 +4,8 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import me.ranzeplay.hnation.main.NetworkingIdentifier;
 import me.ranzeplay.hnation.features.region.viewmodel.RegionCreationModel;
+import me.ranzeplay.hnation.networking.RegionIdentifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
@@ -84,7 +84,7 @@ public class ClientRegionCommand {
         } else {
             // Process
             var nbt = currentCreatingRegion.toNbt();
-            ClientPlayNetworking.send(NetworkingIdentifier.CREATE_REGION_REQUEST, PacketByteBufs.create().writeNbt(nbt));
+            ClientPlayNetworking.send(RegionIdentifier.CREATE_REGION_REQUEST, PacketByteBufs.create().writeNbt(nbt));
             MinecraftClient.getInstance().player.sendMessage(Text.of("Committing region creation"));
         }
 
