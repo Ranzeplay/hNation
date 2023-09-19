@@ -108,6 +108,27 @@ public class SquadCommandServerHandler {
         }
     }
 
+    public static void transferOwnership(MinecraftServer server, ServerPlayerEntity sender, PacketByteBuf packetByteBuf) {
+        var squad = SquadManager.getInstance().getLeadingSquad(sender);
+        var targetPlayer = PlayerManager.getInstance().getPlayer(packetByteBuf.readString());
+        squad.transferLeader(targetPlayer);
+
+        squad.getMembers().forEach((u, p) -> {
+            var player = server.getPlayerManager().getPlayer(u);
+            assert player != null;
+            ServerPlayNetworking.send(player, SquadIdentifier.SQUAD_TRANSFER_NOTIFY, PacketByteBufs.create().writeString(targetPlayer.getName()));
+        });
+    }
+
+    public static void dismiss(MinecraftServer server, ServerPlayerEntity sender) {
+        var squad = SquadManager.getInstance().getLeadingSquad(sender);
+        squad.getMembers().forEach((u, p) -> {
+            var player = server.getPlayerManager().getPlayer(u);
+            assert player != null;
+            ServerPlayNetworking.send(player, SquadIdentifier.SQUAD_DISMISS_NOTIFY, PacketByteBufs.create());
+        });
+    }
+
     public static void registerEvents() {
         ServerPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_CREATE_REQUEST,
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
@@ -148,6 +169,18 @@ public class SquadCommandServerHandler {
         ServerPlayNetworking.registerGlobalReceiver(ChatIdentifier.SEND_CHAT_SQUAD,
                 (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     SquadCommandServerHandler.playerSendMessage(minecraftServer, sender, packetByteBuf);
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_DISMISS_REQUEST,
+                (minecraftServer, sender, _serverPlayNetworkHandler, _packetByteBuf, _packetSender) -> {
+                    SquadCommandServerHandler.dismiss(minecraftServer, sender);
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_TRANSFER_REQUEST,
+                (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
+                    SquadCommandServerHandler.transferOwnership(minecraftServer, sender, packetByteBuf);
                 }
         );
     }

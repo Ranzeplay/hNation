@@ -4,7 +4,7 @@ import me.ranzeplay.hnation.features.communication.squad.client.SquadClientNetwo
 import me.ranzeplay.hnation.main.ClientMain;
 
 import static me.ranzeplay.hnation.features.communication.messaging.global.client.ClientGlobalMessageNetworking.sendPublic;
-import static me.ranzeplay.hnation.features.communication.squad.client.SquadClientNetworking.sendSquad;
+import static me.ranzeplay.hnation.features.communication.squad.client.SquadClientNetworking.sendSquadMessage;
 
 public class ClientCommunicationHandler {
     public static void handle(String message) {
@@ -14,7 +14,7 @@ public class ClientCommunicationHandler {
             case PUBLIC -> sendPublic(message);
             case PRIVATE -> {
             }
-            case SQUAD -> sendSquad(message);
+            case SQUAD -> sendSquadMessage(message);
         }
     }
 

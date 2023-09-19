@@ -53,8 +53,13 @@ public class DbSquad {
         return messages;
     }
 
-    public void transferLeader(DbPlayer leader) {
-        leaderId = leader.getId();
+    public boolean transferLeader(DbPlayer leader) {
+        if (members.containsValue(leader)) {
+            leaderId = leader.getId();
+            return true;
+        }
+
+        return false;
     }
 
     public void invitePlayer(UUID playerId) {
@@ -120,28 +125,28 @@ public class DbSquad {
 
         members = new HashMap<>();
         var memberList = nbt.getList("members", NbtElement.COMPOUND_TYPE);
-        for(int i = 0; i < memberList.size(); i++) {
+        for (int i = 0; i < memberList.size(); i++) {
             var comp = memberList.getCompound(i);
             members.put(comp.getUuid("id"), new DbPlayer(comp.getCompound("player")));
         }
 
         messages = new ArrayList<>();
         var messageList = nbt.getList("messages", NbtElement.COMPOUND_TYPE);
-        for(int i = 0; i < messageList.size(); i++) {
+        for (int i = 0; i < messageList.size(); i++) {
             var comp = messageList.getCompound(i);
             messages.add(new DbSquadMessage(comp));
         }
 
         joinRequests = new HashMap<>();
         var joinRequestList = nbt.getList("joinRequests", NbtElement.COMPOUND_TYPE);
-        for(int i = 0; i < joinRequestList.size(); i++) {
+        for (int i = 0; i < joinRequestList.size(); i++) {
             var comp = memberList.getCompound(i);
             joinRequests.put(comp.getUuid("playerId"), nbt.getLong("time"));
         }
 
         invitations = new HashMap<>();
         var invitationList = nbt.getList("invitations", NbtElement.COMPOUND_TYPE);
-        for(int i = 0; i < invitationList.size(); i++) {
+        for (int i = 0; i < invitationList.size(); i++) {
             var comp = memberList.getCompound(i);
             invitations.put(comp.getUuid("playerId"), nbt.getLong("time"));
         }
