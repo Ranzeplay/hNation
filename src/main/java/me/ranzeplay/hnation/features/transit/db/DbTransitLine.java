@@ -30,6 +30,9 @@ public class DbTransitLine {
     @DatabaseField()
     String paths;
 
+    @DatabaseField(canBeNull = false)
+    int radius;
+
     @ForeignCollectionField(eager = true)
     ForeignCollection<DbTransitConnector> connectors;
 

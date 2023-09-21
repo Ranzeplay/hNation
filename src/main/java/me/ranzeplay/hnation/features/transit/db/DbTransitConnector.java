@@ -68,4 +68,20 @@ public class DbTransitConnector {
 
         this.setSegment(p1, p2);
     }
+
+    public DbTransitLine getLine() {
+        return line;
+    }
+
+    public DbTransitNode getNode() {
+        return node;
+    }
+
+    public int getConnectorId() {
+        return connectorId;
+    }
+
+    public TransitStatus getStatus() {
+        return status;
+    }
 }

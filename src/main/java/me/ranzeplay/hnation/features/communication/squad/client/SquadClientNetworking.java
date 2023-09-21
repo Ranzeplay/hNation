@@ -68,6 +68,31 @@ public class SquadClientNetworking {
     public static void beingDismissed(MinecraftClient client) {
         assert client.player != null;
         client.player.sendMessage(Text.of("[SQUAD] Squad has been dismissed"));
+        ClientMain.joinedSquad = null;
+    }
+
+    public static void ownershipTransfer(MinecraftClient client, PacketByteBuf packetByteBuf) {
+        var player = Objects.requireNonNull(client.player);
+        var newLeader = packetByteBuf.readString();
+
+        if(newLeader.equals(player.getEntityName())) {
+            player.sendMessage(Text.literal("[SQUAD] You are the new leader"));
+        } else {
+            player.sendMessage(Text.literal(String.format("[SQUAD] New leader is %s", newLeader)));
+        }
+    }
+
+    public static void newPlayerJoin(MinecraftClient client, PacketByteBuf packetByteBuf) {
+        var joinedPlayer = packetByteBuf.readString();
+
+        assert client.player != null;
+        client.player.sendMessage(Text.literal(String.format("[SQUAD] %s joined the squad", joinedPlayer)));
+    }
+    public static void playerLeave(MinecraftClient client, PacketByteBuf packetByteBuf) {
+        var leftPlayer = packetByteBuf.readString();
+
+        assert client.player != null;
+        client.player.sendMessage(Text.literal(String.format("[SQUAD] %s left the squad", leftPlayer)));
     }
 
     public static void registerEvents() {
@@ -99,6 +124,16 @@ public class SquadClientNetworking {
         ClientPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_CREATE_REPLY,
                 (minecraftClient, _clientPlayNetworkHandler, packetByteBuf, _packetSender)
                         -> createSquadResponse(minecraftClient, packetByteBuf)
+        );
+
+        ClientPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_TRANSFER_NOTIFY,
+                (minecraftClient, _clientPlayNetworkHandler, packetByteBuf, _packetSender)
+                        -> ownershipTransfer(minecraftClient, packetByteBuf)
+        );
+
+        ClientPlayNetworking.registerGlobalReceiver(SquadIdentifier.SQUAD_LEAVE_NOTIFY,
+                (minecraftClient, _clientPlayNetworkHandler, packetByteBuf, _packetSender)
+                        -> playerLeave(minecraftClient, packetByteBuf)
         );
     }
 }
