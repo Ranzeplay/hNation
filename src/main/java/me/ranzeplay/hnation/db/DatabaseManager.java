@@ -5,6 +5,7 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import me.ranzeplay.hnation.features.communication.announcement.db.DbAnnouncement;
 import me.ranzeplay.hnation.features.player.db.DbPlayer;
 import me.ranzeplay.hnation.features.poi.db.DbPOI;
 import me.ranzeplay.hnation.features.region.db.DbRegion;
@@ -39,6 +40,8 @@ public class DatabaseManager {
     Dao<DbMail, UUID> mailDao;
     Dao<DbGlobalMessage, UUID> publicMessageDao;
 
+    Dao<DbAnnouncement, UUID> announcementDao;
+
     public DatabaseManager(Path dbFile) throws SQLException {
         connectionString = "jdbc:sqlite:" + dbFile;
         connectionSource = new JdbcConnectionSource(connectionString);
@@ -57,6 +60,8 @@ public class DatabaseManager {
         channelMessageDao = DaoManager.createDao(connectionSource, DbChannelMessage.class);
         mailDao = DaoManager.createDao(connectionSource, DbMail.class);
         publicMessageDao = DaoManager.createDao(connectionSource, DbGlobalMessage.class);
+
+        announcementDao = DaoManager.createDao(connectionSource, DbAnnouncement.class);
     }
 
     public void init() throws SQLException {
@@ -74,6 +79,8 @@ public class DatabaseManager {
         TableUtils.createTableIfNotExists(connectionSource, DbChannelMessage.class);
         TableUtils.createTableIfNotExists(connectionSource, DbMail.class);
         TableUtils.createTableIfNotExists(connectionSource, DbGlobalMessage.class);
+
+        TableUtils.createTableIfNotExists(connectionSource, DbAnnouncement.class);
     }
 
     public Dao<DbPOI, UUID> getPoiDao() {
@@ -114,5 +121,9 @@ public class DatabaseManager {
 
     public Dao<DbGlobalMessage, UUID> getPublicMessageDao() {
         return publicMessageDao;
+    }
+
+    public Dao<DbAnnouncement, UUID> getAnnouncementDao() {
+        return announcementDao;
     }
 }

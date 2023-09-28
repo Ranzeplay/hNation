@@ -2,6 +2,8 @@ package me.ranzeplay.hnation.main;
 
 import me.ranzeplay.hnation.features.communication.ClientCommunicationHandler;
 import me.ranzeplay.hnation.features.communication.CommunicationFocusOption;
+import me.ranzeplay.hnation.features.communication.announcement.client.AnnouncementClientNetworking;
+import me.ranzeplay.hnation.features.communication.announcement.client.AnnouncementCommandClientHandler;
 import me.ranzeplay.hnation.features.communication.channel.client.ClientChannelCommand;
 import me.ranzeplay.hnation.features.communication.squad.client.SquadCommandClientHandler;
 import me.ranzeplay.hnation.features.communication.squad.db.DbSquad;
@@ -35,6 +37,7 @@ public class ClientMain implements ClientModInitializer {
                     .then(ClientChannelCommand.buildCommandTree())
                     .then(ClientTransitCommand.buildCommandTree())
                     .then(SquadCommandClientHandler.buildCommandTree())
+                    .then(AnnouncementCommandClientHandler.buildCommandTree())
             );
         });
     }
@@ -43,5 +46,6 @@ public class ClientMain implements ClientModInitializer {
         ClientPoiNetworking.registerEvents();
         ClientRegionNetworking.registerEvents();
         ClientCommunicationHandler.registerEvents();
+        AnnouncementClientNetworking.registerEvents();
     }
 }

@@ -1,6 +1,9 @@
 package me.ranzeplay.hnation.main;
 
 import me.ranzeplay.hnation.db.DatabaseManager;
+import me.ranzeplay.hnation.features.communication.announcement.AnnouncementManager;
+import me.ranzeplay.hnation.features.communication.announcement.server.AnnouncementCommandServerHandler;
+import me.ranzeplay.hnation.features.communication.announcement.server.ServerAnnouncementNetworking;
 import me.ranzeplay.hnation.features.communication.messaging.global.server.ServerGlobalChatNetworking;
 import me.ranzeplay.hnation.features.communication.squad.SquadManager;
 import me.ranzeplay.hnation.features.communication.squad.server.SquadCommandServerHandler;
@@ -38,6 +41,7 @@ public class ServerMain implements DedicatedServerModInitializer {
 
         new PlayerManager(dbManager.getPlayerDao());
         new SquadManager();
+        new AnnouncementManager(dbManager.getAnnouncementDao());
     }
 
     private void registerNetworkingHandlers() {
@@ -49,5 +53,8 @@ public class ServerMain implements DedicatedServerModInitializer {
 
         ServerGlobalChatNetworking.registerEvents();
         SquadCommandServerHandler.registerEvents();
+
+        AnnouncementCommandServerHandler.registerEvents();
+        ServerAnnouncementNetworking.registerEvents();
     }
 }

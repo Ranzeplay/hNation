@@ -1,7 +1,10 @@
 package me.ranzeplay.hnation.features.player.db;
 
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+import me.ranzeplay.hnation.features.communication.announcement.db.DbAnnouncement;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.UUID;
