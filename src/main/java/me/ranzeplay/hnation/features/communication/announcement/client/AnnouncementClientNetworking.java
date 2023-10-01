@@ -52,13 +52,13 @@ public class AnnouncementClientNetworking {
     }
 
     private static void receiveLatestAnnouncements(MinecraftClient client, PacketByteBuf packetByteBuf) {
+        assert client.player != null;
         var data = Objects.requireNonNull(packetByteBuf.readNbt());
         var dataList = data.getList("announcements", NbtElement.COMPOUND_TYPE);
+        client.player.sendMessage(Text.literal(String.format("Displaying latest %d announcement(s)", dataList.size())));
         for (int i = 0; i < dataList.size(); i++) {
             var entry = dataList.getCompound(i);
             var announcement = new AnnouncementViewModel(entry);
-
-            assert client.player != null;
             client.player.sendMessage(Text.literal(announcement.toString()));
         }
     }
