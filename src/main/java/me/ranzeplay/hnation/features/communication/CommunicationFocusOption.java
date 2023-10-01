@@ -1,9 +1,9 @@
 package me.ranzeplay.hnation.features.communication;
 
 public enum CommunicationFocusOption {
-    PUBLIC,
+    GLOBAL,
     CHANNEL,
-    PRIVATE,
+    DIRECT,
     SQUAD;
 
     private String commId;

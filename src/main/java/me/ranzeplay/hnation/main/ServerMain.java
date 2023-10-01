@@ -4,6 +4,7 @@ import me.ranzeplay.hnation.db.DatabaseManager;
 import me.ranzeplay.hnation.features.communication.announcement.AnnouncementManager;
 import me.ranzeplay.hnation.features.communication.announcement.server.AnnouncementCommandServerHandler;
 import me.ranzeplay.hnation.features.communication.announcement.server.ServerAnnouncementNetworking;
+import me.ranzeplay.hnation.features.communication.messaging.direct.server.ServerDirectMessageNetworking;
 import me.ranzeplay.hnation.features.communication.messaging.global.server.ServerGlobalChatNetworking;
 import me.ranzeplay.hnation.features.communication.squad.SquadManager;
 import me.ranzeplay.hnation.features.communication.squad.server.SquadCommandServerHandler;
@@ -52,6 +53,7 @@ public class ServerMain implements DedicatedServerModInitializer {
         ServerTransitLineNetworking.registerEvents();
 
         ServerGlobalChatNetworking.registerEvents();
+        ServerDirectMessageNetworking.registerEvents();
         SquadCommandServerHandler.registerEvents();
 
         AnnouncementCommandServerHandler.registerEvents();

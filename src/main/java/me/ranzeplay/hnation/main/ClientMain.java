@@ -20,7 +20,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 
 @Environment(EnvType.CLIENT)
 public class ClientMain implements ClientModInitializer {
-    public static CommunicationFocusOption communicationFocusOption = CommunicationFocusOption.PUBLIC;
+    public static CommunicationFocusOption communicationFocusOption = CommunicationFocusOption.GLOBAL;
     public static DbSquad joinedSquad = null;
 
     @Override
@@ -38,6 +38,7 @@ public class ClientMain implements ClientModInitializer {
                     .then(ClientTransitCommand.buildCommandTree())
                     .then(SquadCommandClientHandler.buildCommandTree())
                     .then(AnnouncementCommandClientHandler.buildCommandTree())
+                    .then(ClientCommunicationHandler.buildCommandTree())
             );
         });
     }

@@ -26,7 +26,7 @@ public class ServerGlobalChatNetworking {
     }
 
     public static void registerEvents() {
-        ServerPlayNetworking.registerGlobalReceiver(ChatIdentifier.SEND_CHAT_PUBLIC,
+        ServerPlayNetworking.registerGlobalReceiver(ChatIdentifier.SEND_CHAT_GLOBAL,
                 (minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender) -> {
                     try {
                         ServerGlobalChatNetworking.send(minecraftServer, sender, packetByteBuf);

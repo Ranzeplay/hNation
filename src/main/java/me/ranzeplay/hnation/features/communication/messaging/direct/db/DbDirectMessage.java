@@ -1,7 +1,9 @@
 package me.ranzeplay.hnation.features.communication.messaging.direct.db;
 
 import me.ranzeplay.hnation.features.communication.ChatMessageBase;
+import me.ranzeplay.hnation.features.player.PlayerManager;
 import me.ranzeplay.hnation.features.player.db.DbPlayer;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 
 public class DbDirectMessage extends ChatMessageBase {
@@ -16,5 +18,9 @@ public class DbDirectMessage extends ChatMessageBase {
         return Text.empty()
                 .append("<").append(getSender().getName()).append(" @ ").append("[PRIVATE]").append("> ")
                 .append(getMessage());
+    }
+
+    public DbPlayer getReceiver() {
+        return receiver;
     }
 }
