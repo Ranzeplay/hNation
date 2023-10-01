@@ -3,13 +3,13 @@ package me.ranzeplay.hnation.features.communication;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import me.ranzeplay.hnation.features.communication.messaging.client.ClientDirectMessageNetworking;
+import me.ranzeplay.hnation.features.communication.messaging.direct.client.ClientDirectMessageNetworking;
 import me.ranzeplay.hnation.features.communication.squad.client.SquadClientNetworking;
 import me.ranzeplay.hnation.main.ClientMain;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import static me.ranzeplay.hnation.features.communication.messaging.client.ClientDirectMessageNetworking.sendDirect;
+import static me.ranzeplay.hnation.features.communication.messaging.direct.client.ClientDirectMessageNetworking.sendDirect;
 import static me.ranzeplay.hnation.features.communication.messaging.global.client.ClientGlobalMessageNetworking.sendPublic;
 import static me.ranzeplay.hnation.features.communication.squad.client.SquadClientNetworking.sendSquadMessage;
 

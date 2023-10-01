@@ -1,4 +1,4 @@
-package me.ranzeplay.hnation.features.communication.messaging.client;
+package me.ranzeplay.hnation.features.communication.messaging.direct.client;
 
 import me.ranzeplay.hnation.features.communication.messaging.direct.viewmodel.DirectMessageView;
 import me.ranzeplay.hnation.networking.ChatIdentifier;
