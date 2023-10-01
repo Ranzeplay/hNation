@@ -41,7 +41,7 @@ public class AnnouncementManager {
 
     public ArrayList<DbAnnouncement> getLatest(long count) {
         try {
-            var query = dbContext.queryBuilder().orderBy("createTime", false).limit(count).prepare();
+            var query = dbContext.queryBuilder().orderBy("createTime", true).limit(count).prepare();
             return new ArrayList<>(dbContext.query(query));
         } catch (SQLException e) {
             throw new RuntimeException(e);
