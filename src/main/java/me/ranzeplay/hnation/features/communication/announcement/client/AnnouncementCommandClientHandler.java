@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 
 public class AnnouncementCommandClientHandler {
@@ -19,10 +20,15 @@ public class AnnouncementCommandClientHandler {
                                         .executes(context -> create(StringArgumentType.getString(context, "title"), StringArgumentType.getString(context, "content")))
                                 )
                         )
+                        .executes(context -> {
+                            var client = MinecraftClient.getInstance();
+                            client.send(() -> client.setScreen(new AnnouncementCreationScreen()));
+                            return Command.SINGLE_SUCCESS;
+                        })
                 );
     }
 
-    private static int create(String title, String content) {
+    protected static int create(String title, String content) {
         var comp = new NbtCompound();
         comp.putString("title", title);
         comp.putString("content", content);
