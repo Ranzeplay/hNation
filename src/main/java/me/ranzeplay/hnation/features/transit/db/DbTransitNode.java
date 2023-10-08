@@ -34,4 +34,46 @@ public class DbTransitNode {
 
     public DbTransitNode() {
     }
+
+    public DbTransitNode(String name, UUID playerUuid, TransitStatus status, String worldName, DbRegion region) {
+        this.name = name;
+        this.playerUuid = playerUuid;
+        this.status = status;
+        this.worldName = worldName;
+        this.region = region;
+        this.id = UUID.randomUUID();
+        this.createTime = new Timestamp(System.currentTimeMillis());
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public UUID getPlayerUuid() {
+        return playerUuid;
+    }
+
+    public TransitStatus getStatus() {
+        return status;
+    }
+
+    public String getWorldName() {
+        return worldName;
+    }
+
+    public ForeignCollection<DbTransitConnector> getConnectors() {
+        return connectors;
+    }
+
+    public DbRegion getRegion() {
+        return region;
+    }
 }

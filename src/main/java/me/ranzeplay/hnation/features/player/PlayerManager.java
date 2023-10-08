@@ -11,7 +11,7 @@ import java.util.UUID;
 public class PlayerManager {
     private static PlayerManager INSTANCE = null;
 
-    Dao<DbPlayer, UUID> playerDao;
+    final Dao<DbPlayer, UUID> playerDao;
 
     public PlayerManager(Dao<DbPlayer, UUID> playerDao) {
         this.playerDao = playerDao;

@@ -12,6 +12,8 @@ import me.ranzeplay.hnation.features.player.PlayerManager;
 import me.ranzeplay.hnation.features.player.server.ServerPlayerNetworking;
 import me.ranzeplay.hnation.features.poi.server.ServerPOIHandler;
 import me.ranzeplay.hnation.features.region.server.ServerRegionNetworking;
+import me.ranzeplay.hnation.features.transit.TransitLineManager;
+import me.ranzeplay.hnation.features.transit.TransitNodeManager;
 import me.ranzeplay.hnation.features.transit.server.ServerTransitLineNetworking;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -29,7 +31,9 @@ public class ServerMain implements DedicatedServerModInitializer {
 
         var configDirectory = Paths.get(FabricLoader.getInstance().getConfigDir().toAbsolutePath().toString(), "hNation");
         if (!configDirectory.toFile().exists()) {
-            configDirectory.toFile().mkdirs();
+            if(configDirectory.toFile().mkdirs()) {
+                GeneralMain.LOGGER.info("Created config directory");
+            }
         }
 
         try {
@@ -43,6 +47,8 @@ public class ServerMain implements DedicatedServerModInitializer {
         new PlayerManager(dbManager.getPlayerDao());
         new SquadManager();
         new AnnouncementManager(dbManager.getAnnouncementDao());
+        new TransitLineManager(dbManager.getTransitLineDao());
+        new TransitNodeManager(dbManager.getTransitNodeDao());
     }
 
     private void registerNetworkingHandlers() {

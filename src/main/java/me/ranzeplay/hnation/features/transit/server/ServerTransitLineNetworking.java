@@ -5,6 +5,7 @@ import me.ranzeplay.hnation.features.transit.db.DbTransitLine;
 import me.ranzeplay.hnation.features.transit.db.TransitStatus;
 import me.ranzeplay.hnation.features.transit.utils.RailwayScanner;
 import me.ranzeplay.hnation.networking.TransitIdentifier;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.network.PacketByteBuf;
@@ -38,6 +39,8 @@ public class ServerTransitLineNetworking {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+
+                ServerPlayNetworking.send(player, TransitIdentifier.CREATE_TRANSIT_LINE_REPLY, PacketByteBufs.create().writeString("Success"));
             }).start();
         }
     }

@@ -18,15 +18,47 @@ public class DbMail {
     @DatabaseField(canBeNull = false)
     Timestamp sendTime;
 
-    public DbMail(String content, DbPlayer sender, DbPlayer receiver) {
+    @DatabaseField
+    MailStatus status;
+
+    public DbMail(String content, DbPlayer sender, DbPlayer receiver, MailStatus status) {
         this.content = content;
         this.sender = sender;
         this.receiver = receiver;
+        this.status = status;
 
         id = UUID.randomUUID();
         sendTime = new Timestamp(System.currentTimeMillis());
     }
 
     public DbMail() {
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public DbPlayer getSender() {
+        return sender;
+    }
+
+    public DbPlayer getReceiver() {
+        return receiver;
+    }
+
+    public Timestamp getSendTime() {
+        return sendTime;
+    }
+
+    public MailStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(MailStatus status) {
+        this.status = status;
     }
 }

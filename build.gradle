@@ -30,6 +30,9 @@ dependencies {
 
     // Vector library
     implementation 'org.realityforge.vecmath:vecmath:0.13'
+
+    // System perf
+    implementation 'com.github.oshi:oshi-core:6.4.6'
 }
 
 processResources {

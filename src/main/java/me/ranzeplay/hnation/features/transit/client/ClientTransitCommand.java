@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 public class ClientTransitCommand {
     public static LiteralArgumentBuilder<FabricClientCommandSource> buildCommandTree() {
         return ClientCommandManager.literal("transit")
-                .then(ClientTransitLineCommand.buildCommandTree());
+                .then(ClientTransitLineCommand.buildCommandTree())
+                .then(ClientTransitNodeCommand.buildCommandTree());
     }
 }

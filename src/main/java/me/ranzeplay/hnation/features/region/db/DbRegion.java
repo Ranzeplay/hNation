@@ -135,4 +135,20 @@ public class DbRegion {
 
     public DbRegion() {
     }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public DbPlayer getPlayer() {
+        return player;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public Polygon getBorderView() {
+        return borderView;
+    }
 }
