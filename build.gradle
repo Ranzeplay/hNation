@@ -7,11 +7,10 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+    }
 }
 
 dependencies {
@@ -23,6 +22,10 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+    // MessageChain
+    modImplementation "maven.modrinth:messagechain:${project.messagechain_version}"
+    modLocalRuntime "maven.modrinth:messagechain:${project.messagechain_version}"
+
     // ORM support
     implementation "com.j256.ormlite:ormlite-jdbc:${project.ormlite_version}"
     implementation "com.j256.ormlite:ormlite-core:${project.ormlite_version}"
@@ -33,6 +36,12 @@ dependencies {
 
     // System perf
     implementation 'com.github.oshi:oshi-core:6.4.6'
+
+    // Lombok annotator
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    testCompileOnly 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 processResources {
