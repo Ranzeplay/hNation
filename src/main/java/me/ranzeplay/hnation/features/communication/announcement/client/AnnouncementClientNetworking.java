@@ -1,6 +1,6 @@
 package me.ranzeplay.hnation.features.communication.announcement.client;
 
-import me.ranzeplay.hnation.features.communication.announcement.viewmodel.AnnouncementViewModel;
+import me.ranzeplay.hnation.features.communication.announcement.models.AnnouncementViewModel;
 import me.ranzeplay.hnation.networking.AnnouncementIdentifier;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

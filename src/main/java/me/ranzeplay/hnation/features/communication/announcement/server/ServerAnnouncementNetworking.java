@@ -1,8 +1,16 @@
 package me.ranzeplay.hnation.features.communication.announcement.server;
 
 import me.ranzeplay.hnation.features.communication.announcement.AnnouncementManager;
-import me.ranzeplay.hnation.features.communication.announcement.viewmodel.AnnouncementViewModel;
+import me.ranzeplay.hnation.features.communication.announcement.db.DbAnnouncement;
+import me.ranzeplay.hnation.features.communication.announcement.models.AnnouncementViewModel;
+import me.ranzeplay.hnation.features.communication.announcement.models.CreateAnnouncementReplyModel;
+import me.ranzeplay.hnation.features.communication.announcement.models.CreateAnnouncementRequestModel;
+import me.ranzeplay.hnation.features.player.PlayerManager;
 import me.ranzeplay.hnation.networking.AnnouncementIdentifier;
+import me.ranzeplay.messagechain.managers.RemoteRouteManager;
+import me.ranzeplay.messagechain.models.AbstractRouteExecutor;
+import me.ranzeplay.messagechain.models.RouteHandler;
+import me.ranzeplay.messagechain.models.RouteRequestContext;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.nbt.NbtCompound;
@@ -16,6 +24,24 @@ public class ServerAnnouncementNetworking {
                 (_minecraftServer, sender, _serverPlayNetworkHandler, packetByteBuf, _packetSender)
                         -> pushAnnouncements(sender, packetByteBuf)
         );
+
+        RemoteRouteManager.getInstance().registerRoute(new RouteHandler<>(CreateAnnouncementRequestModel.class, CreateAnnouncementReplyModel.class, AnnouncementIdentifier.PUBLISH_ANNOUNCEMENT_REQUEST, new AnnoucementRequestHandler()));
+    }
+
+    static class AnnoucementRequestHandler extends AbstractRouteExecutor<CreateAnnouncementRequestModel, CreateAnnouncementReplyModel> {
+
+        @Override
+        public CreateAnnouncementReplyModel apply(RouteRequestContext<CreateAnnouncementRequestModel> context) {
+            var sender = PlayerManager.getInstance().getPlayer(context.getPlayerSender());
+            var announcement = new DbAnnouncement(context.getPayload().getTitle(), context.getPayload().getContent(), sender);
+            var view = new AnnouncementViewModel(announcement);
+
+            AnnouncementManager.getInstance().create(announcement);
+
+            context.getServer().getPlayerManager().getPlayerList().forEach(p -> ServerPlayNetworking.send(p, AnnouncementIdentifier.BROADCAST_ANNOUNCEMENT_NOTIFY, PacketByteBufs.create().writeNbt(view.toNbt())));
+
+            return new CreateAnnouncementReplyModel();
+        }
     }
 
     private static void pushAnnouncements(ServerPlayerEntity sender, PacketByteBuf packetByteBuf) {

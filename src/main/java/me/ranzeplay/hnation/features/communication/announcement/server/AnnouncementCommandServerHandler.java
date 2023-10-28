@@ -2,7 +2,7 @@ package me.ranzeplay.hnation.features.communication.announcement.server;
 
 import me.ranzeplay.hnation.features.communication.announcement.AnnouncementManager;
 import me.ranzeplay.hnation.features.communication.announcement.db.DbAnnouncement;
-import me.ranzeplay.hnation.features.communication.announcement.viewmodel.AnnouncementViewModel;
+import me.ranzeplay.hnation.features.communication.announcement.models.AnnouncementViewModel;
 import me.ranzeplay.hnation.features.player.PlayerManager;
 import me.ranzeplay.hnation.networking.AnnouncementIdentifier;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
