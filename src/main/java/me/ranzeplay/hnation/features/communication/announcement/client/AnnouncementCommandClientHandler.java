@@ -6,13 +6,12 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.ranzeplay.hnation.features.communication.announcement.models.CreateAnnouncementReplyModel;
 import me.ranzeplay.hnation.features.communication.announcement.models.CreateAnnouncementRequestModel;
 import me.ranzeplay.hnation.networking.AnnouncementIdentifier;
-import me.ranzeplay.messagechain.managers.LocalRequestManager;
+import me.ranzeplay.messagechain.managers.routing.LocalRequestManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
 
 public class AnnouncementCommandClientHandler {
     public static LiteralArgumentBuilder<FabricClientCommandSource> buildCommandTree() {
@@ -32,13 +31,9 @@ public class AnnouncementCommandClientHandler {
     }
 
     protected static int create(String title, String content) {
-        var comp = new NbtCompound();
-        comp.putString("title", title);
-        comp.putString("content", content);
-        // ClientPlayNetworking.send(AnnouncementIdentifier.PUBLISH_ANNOUNCEMENT_REQUEST, PacketByteBufs.create().writeNbt(comp));
-
-        LocalRequestManager.getInstance().sendRequest(AnnouncementIdentifier.PUBLISH_ANNOUNCEMENT_REQUEST, new CreateAnnouncementRequestModel(title, content), CreateAnnouncementReplyModel.class);
-
+        LocalRequestManager.getInstance().sendThreadedRequest(AnnouncementIdentifier.PUBLISH_ANNOUNCEMENT_REQUEST, new CreateAnnouncementRequestModel(title, content), CreateAnnouncementReplyModel.class, x -> {
+            MinecraftClient.getInstance().player.sendMessage(Text.of("Successfully published the announcement!"));
+        });
         return Command.SINGLE_SUCCESS;
     }
 }

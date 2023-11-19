@@ -23,11 +23,6 @@ public class AnnouncementClientNetworking {
                         -> receiveLatestAnnouncements(minecraftClient, packetByteBuf)
         );
 
-        ClientPlayNetworking.registerGlobalReceiver(AnnouncementIdentifier.PUBLISH_ANNOUNCEMENT_NOTIFY,
-                (minecraftClient, _clientPlayNetworkHandler, packetByteBuf, _packetSender)
-                        -> publishStatus(minecraftClient, packetByteBuf)
-        );
-
         ClientPlayNetworking.registerGlobalReceiver(AnnouncementIdentifier.BROADCAST_ANNOUNCEMENT_NOTIFY,
                 (minecraftClient, _clientPlayNetworkHandler, packetByteBuf, _packetSender)
                         -> receiveBroadcast(minecraftClient, packetByteBuf)
@@ -38,11 +33,6 @@ public class AnnouncementClientNetworking {
         var announcement = new AnnouncementViewModel(Objects.requireNonNull(packetByteBuf.readNbt()));
         assert client.player != null;
         client.player.sendMessage(Text.literal(announcement.toString()));
-    }
-
-    private static void publishStatus(MinecraftClient client, PacketByteBuf packetByteBuf) {
-        assert client.player != null;
-        client.player.sendMessage(Text.literal("Announcement publish status: " + (packetByteBuf.readBoolean() ? "success" : "fail")));
     }
 
     private static void pullLatestAnnouncements() {
